@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Product Catalog</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Setting the default font to Inter */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f7f7; /* Light gray background */
+        }
+        /* Custom class to hide elements */
+        .hidden-view {
+            display: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen antialiased">
+
+    <!-- Header Section -->
+    <header class="bg-indigo-700 shadow-xl p-6 md:p-10">
+        <div class="max-w-7xl mx-auto">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-2">
+                Our Catalog Showcase
+            </h1>
+            <p class="text-indigo-200 text-lg">
+                Explore our collection of high-quality products. Contact us for ordering and availability.
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
+
+        <!-- 1. Catalog Grid View (Default) -->
+        <div id="catalog-grid-view">
+            <div id="catalog-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Product cards will be injected here by JavaScript -->
+            </div>
+        </div>
+
+        <!-- 2. Product Details View (Hidden by default) -->
+        <div id="details-view" class="hidden-view">
+            <!-- Back Button -->
+            <button onclick="showCatalogGrid()" class="flex items-center text-indigo-600 hover:text-indigo-800 transition duration-150 mb-6 font-medium">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                </svg>
+                Back to Catalog
+            </button>
+            <div id="product-details-container" class="bg-white rounded-xl shadow-2xl p-6 md:p-10">
+                <!-- Detailed product information will be injected here -->
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // --- MOCK CATALOG DATA ---
+        // 1. EDIT THIS ARRAY to add, remove, or change your catalog items.
+        const products = [
+            {
+                id: "voyager-backpack",
+                name: "The Voyager Backpack",
+                description: "Durable, waterproof travel backpack with integrated charging port and ergonomic lumbar support. This is the extended description for the details page, highlighting its multiple compartments and a hidden security pocket.",
+                price: "$129.00",
+                imageUrl: "https://placehold.co/800x600/1e293b/ffffff?text=Voyager+Bag+Details",
+                long_details: "The Voyager is built for the long haul. Featuring military-grade nylon, reinforced zippers, and a dedicated 15-inch laptop sleeve. Perfect for weekend trips or daily commuting."
+            },
+            {
+                id: "echo-headphones",
+                name: "Echo Noise-Cancelling Headphones",
+                description: "Immersive audio experience with 30 hours of battery life and active noise cancellation technology.",
+                price: "$249.00",
+                imageUrl: "https://placehold.co/800x600/4f46e5/ffffff?text=Echo+Headphones+Details",
+                long_details: "Equipped with advanced spatial audio, the Echo headphones deliver crystal-clear sound. The plush earcups and adjustable headband provide maximum comfort for long listening sessions. Includes a protective carrying case."
+            },
+            {
+                id: "zenith-smartwatch",
+                name: "Zenith Smartwatch (Series 3)",
+                description: "Health tracking, GPS, and notifications in a sleek aluminum casing. Available in three colors.",
+                price: "$199.50",
+                imageUrl: "https://placehold.co/800x600/10b981/ffffff?text=Zenith+Watch+Details",
+                long_details: "Monitor your heart rate, sleep cycles, and daily activity with precision. The Zenith Series 3 is swim-proof and features a vibrant AMOLED display that is always-on. Connects seamlessly with all major phone operating systems."
+            },
+            {
+                id: "luna-lamp",
+                name: "Luna Desk Lamp",
+                description: "Modern, adjustable LED desk lamp with customizable temperature and brightness settings.",
+                price: "$65.00",
+                imageUrl: "https://placehold.co/800x600/fbbf24/101010?text=Luna+Lamp+Details",
+                long_details: "The Luna lamp offers five color temperature modes and seven brightness levels. Its flexible goose-neck design allows you to direct light exactly where you need it, making it ideal for reading or detailed work."
+            }
+        ];
+        // ------------------------------------
+
+        const catalogGridView = document.getElementById('catalog-grid-view');
+        const detailsView = document.getElementById('details-view');
+        const catalogGrid = document.getElementById('catalog-grid');
+        const productDetailsContainer = document.getElementById('product-details-container');
+
+        /**
+         * Finds a product object by its unique ID.
+         * @param {string} id - The ID of the product.
+         * @returns {object | undefined} The product object or undefined if not found.
+         */
+        function getProductById(id) {
+            return products.find(p => p.id === id);
+        }
+
+        /**
+         * Switches the view to show the main catalog grid.
+         */
+        function showCatalogGrid() {
+            catalogGridView.classList.remove('hidden-view');
+            detailsView.classList.add('hidden-view');
+            // Update URL hash for clean navigation
+            window.location.hash = '';
+        }
+
+        /**
+         * Switches the view to show a single product's details.
+         * @param {string} productId - The ID of the product to show.
+         */
+        window.showProductDetails = function(productId) {
+            const product = getProductById(productId);
+
+            if (!product) {
+                console.error('Product not found for ID:', productId);
+                showCatalogGrid();
+                return;
+            }
+
+            // 1. Build the HTML for the detail view
+            const detailHtml = `
+                <div class="md:flex md:space-x-10">
+                    <div class="md:w-1/2 mb-6 md:mb-0">
+                        <img
+                            src="${product.imageUrl}"
+                            alt="Detailed image of ${product.name}"
+                            class="w-full rounded-lg shadow-lg"
+                            onerror="this.onerror=null; this.src='https://placehold.co/800x600/e0e0e0/333333?text=Details+Image+Missing';"
+                        >
+                    </div>
+                    <div class="md:w-1/2">
+                        <h2 class="text-4xl font-bold text-gray-900 mb-4">${product.name}</h2>
+                        <p class="text-3xl font-extrabold text-indigo-700 mb-6">${product.price}</p>
+                        <h3 class="text-lg font-semibold text-gray-800 border-b pb-2 mb-4">Product Overview</h3>
+                        <p class="text-gray-700 text-lg mb-8 leading-relaxed">${product.long_details}</p>
+
+                        <div class="bg-indigo-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-indigo-800 mb-2">How to Order</h4>
+                            <p class="text-indigo-700 text-sm">Please reference Product ID: <span class="font-mono text-base">${product.id}</span> when contacting us for availability.</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // 2. Inject and switch the view
+            productDetailsContainer.innerHTML = detailHtml;
+            catalogGridView.classList.add('hidden-view');
+            detailsView.classList.remove('hidden-view');
+
+            // 3. Update URL hash for sharing/bookmarking
+            window.location.hash = productId;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+
+        /**
+         * Creates an HTML element for a single product card.
+         * @param {object} product - The product data object.
+         * @returns {string} The HTML string for the product card.
+         */
+        function createProductCard(product) {
+            // Note the use of onclick="showProductDetails('${product.id}')"
+            return `
+                <div class="bg-white rounded-xl shadow-lg hover:shadow-2xl transition duration-300 overflow-hidden transform hover:-translate-y-1">
+                    <img
+                        src="${product.imageUrl}"
+                        alt="Image of ${product.name}"
+                        class="w-full h-48 object-cover object-center"
+                        onerror="this.onerror=null; this.src='https://placehold.co/600x400/e0e0e0/333333?text=Image+Not+Found';"
+                    >
+                    <div class="p-6">
+                        <h2 class="text-2xl font-semibold text-gray-900 mb-2">${product.name}</h2>
+                        <p class="text-indigo-600 text-xl font-bold mb-4">${product.price}</p>
+                        <p class="text-gray-600 text-base leading-relaxed">${product.description}</p>
+                    </div>
+                    <div class="p-6 pt-0">
+                        <button onclick="showProductDetails('${product.id}')" class="w-full py-3 bg-indigo-500 text-white font-medium rounded-lg hover:bg-indigo-600 transition duration-150 shadow-md">
+                            View Details
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        /**
+         * Renders all product cards to the catalog grid.
+         */
+        function renderCatalog() {
+            if (!catalogGrid) return;
+            const catalogHtml = products.map(createProductCard).join('');
+            catalogGrid.innerHTML = catalogHtml;
+        }
+
+        /**
+         * Checks the URL hash on load to see if a specific product should be displayed immediately.
+         */
+        function checkInitialHash() {
+            const productId = window.location.hash.substring(1);
+            if (productId) {
+                showProductDetails(productId);
+            } else {
+                showCatalogGrid();
+            }
+        }
+
+        // Initialize the catalog display and check the hash on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCatalog();
+            checkInitialHash();
+        });
+
+        // Listen for hash changes (e.g., browser back button)
+        window.addEventListener('hashchange', () => {
+            checkInitialHash();
+        });
+    </script>
+
+</body>
+</html>
