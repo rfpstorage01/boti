@@ -68,9 +68,13 @@
             {
                 id: "nolita_19",
                 name: "Coach - Nolita 19",
+                // ADDED: Missing description for the catalog card
+                description: "Tas tangan Nolita 19 yang ikonik, hadir dalam berbagai warna kulit dan kanvas. Sempurna untuk acara santai.",
                 price: "Rp 2.500.000",
                 // Home Item Image
                 imageUrl: "https://coach.scene7.com/is/image/Coach/cw426_imxdm_a0?$desktopProduct$",
+                // ADDED: Missing long details for the details view
+                long_details: "Nolita 19 terbuat dari kulit berkualitas tinggi dengan detail hardware yang elegan. Tali rantai yang bisa dilepas memungkinkan Anda membawanya sebagai clutch atau tas bahu. Interior yang luas cukup untuk menyimpan barang-barang penting Anda.",
                 // NEW: Added variants array
                 variants: [
                     {
@@ -95,7 +99,7 @@
                 name: "Echo Noise-Cancelling Headphones",
                 description: "Immersive audio experience with 30 hours of battery life and active noise cancellation technology.",
                 price: "$249.00",
-                // Home Item Image
+                // NOTE: This product uses the simple, single-image structure
                 imageUrl: "https://placehold.co/800x600/4f46e5/ffffff?text=Echo+Headphones+Details",
                 long_details: "Equipped with advanced spatial audio, the Echo headphones deliver crystal-clear sound. The plush earcups and adjustable headband provide maximum comfort for long listening sessions. Includes a protective carrying case."
             },
@@ -194,7 +198,8 @@
 
             // Determine initial values
             const mainImageUrl = isVariantProduct ? initialVariant.imageUrl : product.imageUrl;
-            const initialProductId = isVariantProduct ? initialVariant.id : product.id;
+            // The initialProductId and initialColorName are no longer strictly needed in the UI,
+            // but we keep them for logic consistency.
             const initialColorName = isVariantProduct ? initialVariant.color : 'N/A';
 
             // Generate thumbnail HTML if variants exist
@@ -228,6 +233,8 @@
                 </div>
             ` : '';
 
+            // Ensure long_details has a fallback to prevent "undefined" from showing
+            const productLongDetails = product.long_details || "No detailed description available for this product.";
 
             // 1. Build the HTML for the detail view
             const detailHtml = `
@@ -246,12 +253,10 @@
                         ${variantSelector} <!-- Variant selector added here -->
                         <p class="text-3xl font-extrabold text-indigo-700 mb-6">${product.price}</p>
                         <h3 class="text-lg font-semibold text-gray-800 border-b pb-2 mb-4">Product Overview</h3>
-                        <p class="text-gray-700 text-lg mb-8 leading-relaxed">${product.long_details}</p>
+                        <p class="text-gray-700 text-lg mb-8 leading-relaxed">${productLongDetails}</p>
 
-                        <div class="bg-indigo-50 p-4 rounded-lg">
-                            <h4 class="font-semibold text-indigo-800 mb-2">How to Order</h4>
-                            <p class="text-indigo-700 text-sm">Please reference Product ID: <span id="ordering-product-id" class="font-mono text-base">${initialProductId}</span> when contacting us for availability.</p>
-                        </div>
+                        <!-- REMOVED: The "How to Order" section has been removed as requested. -->
+
                     </div>
                 </div>
             `;
@@ -277,7 +282,8 @@
             const cardImageUrl = (product.variants && product.variants.length > 0)
                 ? product.variants[0].imageUrl
                 : product.imageUrl;
-            const cardDescription = product.description;
+            // Add a fallback for description just in case, although the data should now be complete.
+            const cardDescription = product.description || '';
 
             // Note the use of onclick="showProductDetails('${product.id}')"
             return `
@@ -337,6 +343,3 @@
 
 </body>
 </html>
-
-
-
