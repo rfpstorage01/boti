@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BOSTON JASTIP</title>
-    <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* Setting the default font to Inter */
@@ -24,7 +23,6 @@
 </head>
 <body class="min-h-screen antialiased">
 
-    <!-- Header Section -->
     <header class="bg-indigo-700 shadow-xl p-6 md:p-10">
         <div class="max-w-7xl mx-auto">
             <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-2">
@@ -38,16 +36,12 @@
 
     <main class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
 
-        <!-- 1. Catalog Grid View (Default) -->
         <div id="catalog-grid-view">
             <div id="catalog-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Product cards will be injected here by JavaScript -->
-            </div>
+                </div>
         </div>
 
-        <!-- 2. Product Details View (Hidden by default) -->
         <div id="details-view" class="hidden-view">
-            <!-- Back Button -->
             <button onclick="showCatalogGrid()" class="flex items-center text-indigo-600 hover:text-indigo-800 transition duration-150 mb-6 font-medium">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
@@ -55,41 +49,36 @@
                 Back to Catalog
             </button>
             <div id="product-details-container" class="bg-white rounded-xl shadow-2xl p-6 md:p-10">
-                <!-- Detailed product information will be injected here -->
-            </div>
+                </div>
         </div>
 
     </main>
 
     <script>
-        // --- MOCK CATALOG DATA ---
-        // 1. EDIT THIS ARRAY to add, remove, or change your catalog items.
+        // --- MOCK CATALOG DATA (Price included in variants for dynamic updates) ---
         const products = [
             {
                 id: "nolita_19",
                 name: "Coach - Nolita 19",
-                // ADDED: Missing description for the catalog card
-                description: "Tas tangan Nolita 19 yang ikonik, hadir dalam berbagai warna kulit dan kanvas. Sempurna untuk acara santai.",
-                price: "Rp 2.500.000",
-                // Home Item Image
+                price: "Rp 2.500.000", // Default price (used if no variants selected/listed)
                 imageUrl: "https://coach.scene7.com/is/image/Coach/cw426_imxdm_a0?$desktopProduct$",
-                // ADDED: Missing long details for the details view
-                long_details: "Nolita 19 terbuat dari kulit berkualitas tinggi dengan detail hardware yang elegan. Tali rantai yang bisa dilepas memungkinkan Anda membawanya sebagai clutch atau tas bahu. Interior yang luas cukup untuk menyimpan barang-barang penting Anda.",
-                // NEW: Added variants array
                 variants: [
                     {
                         id: "nolita_19_1",
                         color: "signature canvas/Gold/Sand/Chalk",
+                        price: "Rp 2.500.000", // Variant-specific price
                         imageUrl: "https://coach.scene7.com/is/image/Coach/cw426_imxdm_a0?$desktopProduct$",
                     },
                     {
                         id: "nolita_19_2",
                         color: "smooth leather/Gold",
+                        price: "Rp 2.650.000", // Variant-specific price
                         imageUrl: "https://coach.scene7.com/is/image/Coach/cci92_immrn_a0?$desktopProduct$",
                     },
                     {
                         id: "nolita_19_3",
                         color: "novelty leather/Silver",
+                        price: "Rp 2.700.000", // Variant-specific price
                         imageUrl: "https://coach.scene7.com/is/image/Coach/ccf58_sva47_a0?$desktopProduct$",
                     },
                 ]
@@ -97,27 +86,20 @@
             {
                 id: "echo-headphones",
                 name: "Echo Noise-Cancelling Headphones",
-                description: "Immersive audio experience with 30 hours of battery life and active noise cancellation technology.",
                 price: "$249.00",
-                // NOTE: This product uses the simple, single-image structure
                 imageUrl: "https://placehold.co/800x600/4f46e5/ffffff?text=Echo+Headphones+Details",
-                long_details: "Equipped with advanced spatial audio, the Echo headphones deliver crystal-clear sound. The plush earcups and adjustable headband provide maximum comfort for long listening sessions. Includes a protective carrying case."
             },
             {
                 id: "zenith-smartwatch",
                 name: "Zenith Smartwatch (Series 3)",
-                description: "Health tracking, GPS, and notifications in a sleek aluminum casing. Available in three colors.",
                 price: "$199.50",
                 imageUrl: "https://placehold.co/800x600/10b981/ffffff?text=Zenith+Watch+Details",
-                long_details: "Monitor your heart rate, sleep cycles, and daily activity with precision. The Zenith Series 3 is swim-proof and features a vibrant AMOLED display that is always-on. Connects seamlessly with all major phone operating systems."
             },
             {
                 id: "luna-lamp",
                 name: "Luna Desk Lamp",
-                description: "Modern, adjustable LED desk lamp with customizable temperature and brightness settings.",
                 price: "$65.00",
                 imageUrl: "https://placehold.co/800x600/fbbf24/101010?text=Luna+Lamp+Details",
-                long_details: "The Luna lamp offers five color temperature modes and seven brightness levels. Its flexible goose-neck design allows you to direct light exactly where you need it, making it ideal for reading or detailed work."
             }
         ];
         // ------------------------------------
@@ -149,9 +131,25 @@
             // Update URL hash for clean navigation
             window.location.hash = '';
         }
+        
+        /**
+         * Updates the WhatsApp order link based on the selected product and variant.
+         * @param {string} name - The product name.
+         * @param {string} color - The selected variant color/description.
+         */
+        function updateOrderLink(name, color) {
+            const orderLink = document.getElementById('order-link');
+            // If the product has variants, use the selected color in the message
+            const selectedItemName = color !== 'N/A' ? `${name} (${color})` : name;
+            
+            const whatsappMessage = `Halo, saya tertarik untuk Jastip produk ${selectedItemName}. Berapa total biayanya sampai Indonesia?`;
+            const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(whatsappMessage)}`;
+            orderLink.href = whatsappUrl;
+        }
 
         /**
-         * Switches the main product image and updates the active variant styling.
+         * Switches the main product image and updates the active variant styling,
+         * color name, price, and the order link.
          * This function is called by the thumbnail buttons.
          * @param {string} variantId - The ID of the selected variant.
          */
@@ -169,9 +167,14 @@
             });
             document.getElementById(`variant-btn-${variantId}`).classList.add('active');
 
-            // 3. Update the ordering reference ID and color name
-            document.getElementById('ordering-product-id').textContent = selectedVariant.id;
+            // 3. Update the color name display
             document.getElementById('selected-color-name').textContent = selectedVariant.color;
+
+            // 4. Update the price display
+            document.getElementById('product-price').textContent = selectedVariant.price;
+
+            // 5. Update the Order Link with the currently selected variant
+            updateOrderLink(currentProductName, selectedVariant.color);
         }
 
         /**
@@ -191,6 +194,8 @@
 
             // Check if the product has variants
             const isVariantProduct = product.variants && product.variants.length > 0;
+            
+            // If there are variants, use the first variant's details for initial display.
             const initialVariant = isVariantProduct ? product.variants[0] : null;
 
             // Set global state for variant switching
@@ -198,9 +203,9 @@
 
             // Determine initial values
             const mainImageUrl = isVariantProduct ? initialVariant.imageUrl : product.imageUrl;
-            // The initialProductId and initialColorName are no longer strictly needed in the UI,
-            // but we keep them for logic consistency.
             const initialColorName = isVariantProduct ? initialVariant.color : 'N/A';
+            // Use the variant price for the detail view if variants exist
+            const initialPrice = isVariantProduct ? initialVariant.price : product.price;
 
             // Generate thumbnail HTML if variants exist
             const thumbnailHtml = isVariantProduct ? product.variants.map((variant, index) => {
@@ -233,9 +238,6 @@
                 </div>
             ` : '';
 
-            // Ensure long_details has a fallback to prevent "undefined" from showing
-            const productLongDetails = product.long_details || "No detailed description available for this product.";
-
             // 1. Build the HTML for the detail view
             const detailHtml = `
                 <div class="md:flex md:space-x-10">
@@ -250,12 +252,16 @@
                     </div>
                     <div class="md:w-1/2">
                         <h2 class="text-4xl font-bold text-gray-900 mb-4">${product.name}</h2>
-                        ${variantSelector} <!-- Variant selector added here -->
-                        <p class="text-3xl font-extrabold text-indigo-700 mb-6">${product.price}</p>
-                        <h3 class="text-lg font-semibold text-gray-800 border-b pb-2 mb-4">Product Overview</h3>
-                        <p class="text-gray-700 text-lg mb-8 leading-relaxed">${productLongDetails}</p>
-
-                        <!-- REMOVED: The "How to Order" section has been removed as requested. -->
+                        ${variantSelector} <p id="product-price" class="text-3xl font-extrabold text-indigo-700 mb-6">${initialPrice}</p>
+                        
+                        <div class="mt-8 pt-4 border-t border-gray-200">
+                            <h3 class="text-xl font-bold text-gray-900 mb-4">Interested in Jastip?</h3>
+                            <p class="text-gray-600 mb-4">Click below to start your order via WhatsApp or another contact method.</p>
+                            
+                            <a href="#" id="order-link" class="inline-flex items-center justify-center w-full md:w-auto px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-green-500 hover:bg-green-600 transition duration-150 shadow-xl transform hover:scale-[1.01]">
+                                Place an Order Now
+                            </a>
+                        </div>
 
                     </div>
                 </div>
@@ -269,6 +275,9 @@
             // 3. Update URL hash for sharing/bookmarking
             window.location.hash = productId;
             window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // 4. Set the initial order link
+            updateOrderLink(product.name, initialColorName);
         }
 
 
@@ -282,8 +291,11 @@
             const cardImageUrl = (product.variants && product.variants.length > 0)
                 ? product.variants[0].imageUrl
                 : product.imageUrl;
-            // Add a fallback for description just in case, although the data should now be complete.
-            const cardDescription = product.description || '';
+            
+            // Determine the price for the main catalog card
+            const cardPrice = (product.variants && product.variants.length > 0)
+                ? product.variants[0].price // Show the price of the first variant if available
+                : product.price;
 
             // Note the use of onclick="showProductDetails('${product.id}')"
             return `
@@ -296,8 +308,7 @@
                     >
                     <div class="p-6">
                         <h2 class="text-2xl font-semibold text-gray-900 mb-2">${product.name}</h2>
-                        <p class="text-indigo-600 text-xl font-bold mb-4">${product.price}</p>
-                        <p class="text-gray-600 text-base leading-relaxed">${cardDescription}</p>
+                        <p class="text-indigo-600 text-xl font-bold mb-4">${cardPrice}</p>
                     </div>
                     <div class="p-6 pt-0">
                         <button onclick="showProductDetails('${product.id}')" class="w-full py-3 bg-indigo-500 text-white font-medium rounded-lg hover:bg-indigo-600 transition duration-150 shadow-md">
