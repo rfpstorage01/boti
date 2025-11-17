@@ -44,6 +44,16 @@
 
     <main class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
 
+        <!-- 0. Filter Bar (New Addition) -->
+        <div id="filter-bar" class="bg-white p-4 rounded-xl shadow-md mb-6 flex items-center space-x-4">
+            <label for="brand-filter" class="text-gray-700 font-semibold">Filter by Brand:</label>
+            <select id="brand-filter" onchange="filterProducts(this.value)"
+                    class="p-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 shadow-sm md:w-64 w-full md:auto">
+                <!-- Options will be populated by JavaScript -->
+                <option value="all">All Brands</option>
+            </select>
+        </div>
+
         <!-- 1. Catalog Grid View (Default) -->
         <div id="catalog-grid-view">
             <div id="catalog-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -69,12 +79,13 @@
 
     <script>
         // --- MOCK CATALOG DATA (Price included in variants for dynamic updates) ---
+        // Brand field added to each product
         const products = [
             {
                 id: "nolita_19",
                 name: "Coach - Nolita 19",
-                price: "Rp 2.500.000", // Default price (used if no variants selected/listed)
-                // Note: 'images' array is replaced by 'media' array of objects
+                brand: "Coach", // NEW FIELD
+                price: "Rp 2.500.000",
                 variants: [
                     {
                         id: "nolita_19_1",
@@ -116,20 +127,30 @@
             {
                 id: "echo-headphones",
                 name: "Echo Noise-Cancelling Headphones",
+                brand: "Sony", // NEW FIELD
                 price: "$249.00",
                 imageUrl: "https://placehold.co/800x600/4f46e5/ffffff?text=Echo+Headphones+Details",
             },
             {
                 id: "zenith-smartwatch",
                 name: "Zenith Smartwatch (Series 3)",
+                brand: "Apple", // NEW FIELD
                 price: "$199.50",
                 imageUrl: "https://placehold.co/800x600/10b981/ffffff?text=Zenith+Watch+Details",
             },
             {
                 id: "luna-lamp",
                 name: "Luna Desk Lamp",
+                brand: "IKEA", // NEW FIELD
                 price: "$65.00",
                 imageUrl: "https://placehold.co/800x600/fbbf24/101010?text=Luna+Lamp+Details",
+            },
+            {
+                id: "coach-wallet",
+                name: "Coach Slim Wallet",
+                brand: "Coach", // NEW FIELD
+                price: "Rp 1.200.000",
+                imageUrl: "https://placehold.co/800x600/7c3aed/ffffff?text=Coach+Wallet",
             }
         ];
         // ------------------------------------
@@ -138,11 +159,13 @@
         const detailsView = document.getElementById('details-view');
         const catalogGrid = document.getElementById('catalog-grid');
         const productDetailsContainer = document.getElementById('product-details-container');
+        const brandFilterSelect = document.getElementById('brand-filter'); // Reference to the new filter
 
         // Global state to track current product selection
         let currentProductVariants = [];
         let currentProductName = '';
         let currentSelectedVariant = null;
+        let activeFilter = 'all'; // New state for the active filter
 
         /**
          * Finds a product object by its unique ID.
@@ -157,6 +180,7 @@
         function showCatalogGrid() {
             catalogGridView.classList.remove('hidden-view');
             detailsView.classList.add('hidden-view');
+            document.getElementById('filter-bar').classList.remove('hidden-view'); // Show filter bar
             window.location.hash = '';
         }
         
@@ -166,7 +190,7 @@
         function updateOrderLink(name, color) {
             const orderLink = document.getElementById('order-link');
             
-            // !! IMPORTANT: REPLACE '6281234567890' with your actual WhatsApp number including country code (e.g., 628xxxxxxx) !!
+            // !! IMPORTANT: REPLACE '1000000000' with your actual WhatsApp number including country code (e.g., 628xxxxxxx) !!
             const whatsappNumber = '16179355621'; 
             
             const selectedItemName = color !== 'N/A' ? `${name} (${color})` : name;
@@ -195,8 +219,8 @@
                 // Add a video icon overlay if it's a video
                 const videoOverlay = item.type === 'video' ? `
                     <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30">
-                         <!-- Play Icon SVG -->
-                        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg>
+                           <!-- Play Icon SVG -->
+                         <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg>
                     </div>
                 ` : '';
 
@@ -330,6 +354,10 @@
             // Determine initial values for rendering
             const initialColorName = isVariantProduct ? initialVariant.color : 'N/A';
             const initialPrice = isVariantProduct ? initialVariant.price : product.price;
+            
+            // Brand Information (NEW)
+            const brandInfo = product.brand ? `<p class="text-sm font-medium text-gray-500 mb-2">Brand: <span class="text-indigo-600">${product.brand}</span></p>` : '';
+
 
             // Generate color variant thumbnail HTML if variants exist
             const variantThumbnailHtml = isVariantProduct ? product.variants.map((variant, index) => {
@@ -384,6 +412,7 @@
                     <!-- Details Column -->
                     <div class="md:w-1/2">
                         <h2 class="text-4xl font-bold text-gray-900 mb-4">${product.name}</h2>
+                        ${brandInfo} <!-- Brand Info Added Here -->
                         ${variantSelector} <!-- Color variant selector added here -->
                         <p id="product-price" class="text-3xl font-extrabold text-indigo-700 mb-6">${initialPrice}</p>
                         
@@ -405,15 +434,14 @@
             productDetailsContainer.innerHTML = detailHtml;
             catalogGridView.classList.add('hidden-view');
             detailsView.classList.remove('hidden-view');
-
-            // 3. Update URL hash
+            document.getElementById('filter-bar').classList.add('hidden-view'); // Hide filter bar
             window.location.hash = productId;
             window.scrollTo({ top: 0, behavior: 'smooth' });
 
-            // 4. Set the initial order link
+            // 3. Set the initial order link
             updateOrderLink(product.name, initialColorName);
 
-            // 5. Render the gallery and select the first item
+            // 4. Render the gallery and select the first item
             if (isVariantProduct) {
                 renderVariantGallery(initialVariant.media, initialVariant.color);
                 selectGalleryMedia(0);
@@ -438,12 +466,15 @@
                 if (firstMedia && firstMedia.type === 'image') {
                     cardImageUrl = firstMedia.url;
                 } else if (firstMedia && firstMedia.type === 'video') {
-                     // Use a video placeholder for the card if only video is available
-                     cardImageUrl = 'https://placehold.co/600x400/4f46e5/ffffff?text=Video+Available'; 
+                    // Use a video placeholder for the card if only video is available
+                    cardImageUrl = 'https://placehold.co/600x400/4f46e5/ffffff?text=Video+Available'; 
                 }
                 cardPrice = product.variants[0].price;
             }
             
+            // Extract brand name for display
+            const brandName = product.brand || 'Misc.';
+
             // Note the use of onclick="showProductDetails('${product.id}')"
             return `
                 <div class="bg-white rounded-xl shadow-lg hover:shadow-2xl transition duration-300 overflow-hidden transform hover:-translate-y-1">
@@ -454,6 +485,7 @@
                         onerror="this.onerror=null; this.src='https://placehold.co/600x400/e0e0e0/333333?text=Image+Not+Found';"
                     >
                     <div class="p-6">
+                        <p class="text-sm font-medium text-indigo-500 mb-1">${brandName}</p>
                         <h2 class="text-2xl font-semibold text-gray-900 mb-2">${product.name}</h2>
                         <p class="text-indigo-600 text-xl font-bold mb-4">${cardPrice}</p>
                     </div>
@@ -465,14 +497,57 @@
                 </div>
             `;
         }
+        
+        /**
+         * Filters the products displayed in the catalog grid based on the selected brand.
+         * @param {string} brandName - The brand to filter by, or 'all'.
+         */
+        window.filterProducts = function(brandName) {
+            activeFilter = brandName;
+            
+            const filteredProducts = products.filter(product => {
+                if (brandName === 'all') {
+                    return true;
+                }
+                // Case-insensitive comparison
+                return product.brand && product.brand.toLowerCase() === brandName.toLowerCase();
+            });
+            
+            // Re-render the catalog with the filtered list
+            renderCatalog(filteredProducts);
+        }
 
         /**
-         * Renders all product cards to the catalog grid.
+         * Renders product cards to the catalog grid based on the provided list.
+         * @param {Array} productList - The list of products to display (defaults to the global list).
          */
-        function renderCatalog() {
+        function renderCatalog(productList = products) {
             if (!catalogGrid) return;
-            const catalogHtml = products.map(createProductCard).join('');
+            const catalogHtml = productList.map(createProductCard).join('');
             catalogGrid.innerHTML = catalogHtml;
+        }
+
+        /**
+         * Populates the brand filter dropdown with unique brands from the product list.
+         */
+        function populateBrandFilter() {
+            const brands = new Set();
+            products.forEach(p => {
+                if (p.brand) {
+                    brands.add(p.brand);
+                }
+            });
+
+            // Clear existing options (except 'All Brands')
+            brandFilterSelect.innerHTML = '<option value="all">All Brands</option>';
+            
+            // Add unique brands as options
+            Array.from(brands).sort().forEach(brand => {
+                const option = document.createElement('option');
+                option.value = brand;
+                option.textContent = brand;
+                brandFilterSelect.appendChild(option);
+            });
         }
 
         /**
@@ -489,7 +564,9 @@
 
         // Initialize the catalog display and check the hash on page load
         document.addEventListener('DOMContentLoaded', () => {
-            renderCatalog();
+            populateBrandFilter();
+            // Initial render uses the full list
+            renderCatalog(); 
             checkInitialHash();
         });
 
@@ -501,4 +578,3 @@
 
 </body>
 </html>
-
