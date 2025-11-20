@@ -4,80 +4,100 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BOSTON JASTIP</title>
-    <!-- Load Tailwind CSS -->
+
+    <!-- Google Fonts for luxury feel -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
+
     <style>
-        /* Setting the default font to Inter */
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f7f7f7; /* Light gray background */
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #f4f2ef; /* soft neutral like Coach */
         }
-        /* Custom class to hide elements */
         .hidden-view {
             display: none;
         }
-        /* Style for the active variant color selector */
         .variant-thumbnail.active {
-            border: 4px solid #4f46e5; /* Tailwind indigo-600 */
+            border: 2px solid #111827; /* near-black, subtle luxury */
         }
-        /* Style for the active image in the side gallery */
         .gallery-thumbnail-btn.active-gallery {
-            border: 3px solid #10b981; /* Tailwind emerald-500 for distinction */
+            border: 2px solid #111827;
             opacity: 1;
-            box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+            box-shadow: 0 0 0 1px rgba(17, 24, 39, 0.05);
         }
     </style>
 </head>
-<body class="min-h-screen antialiased">
+<body class="min-h-screen antialiased text-gray-900">
 
-    <!-- Header Section -->
-    <header class="bg-indigo-700 shadow-xl p-6 md:p-10">
-        <div class="max-w-7xl mx-auto">
-            <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-2">
-                BOSTON JASTIP
-            </h1>
-            <p class="text-indigo-200 text-lg">
-                Jasa Titip dari US ke Indonesia.
+    <!-- Luxury Header (H2 style) -->
+    <header class="bg-white border-b border-gray-200">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col gap-1">
+            <div class="flex items-baseline justify-between">
+                <h1 class="text-3xl sm:text-4xl font-semibold tracking-[0.35em] uppercase text-gray-900"
+                    style="font-family: 'Playfair Display', serif;">
+                    BOSTON&nbsp;JASTIP
+                </h1>
+            </div>
+            <p class="text-sm text-gray-500">
+                Curated picks from the US, brought to Indonesia with care.
             </p>
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10">
 
-        <!-- 0. Filter Bar -->
-        <div id="filter-bar" class="bg-white p-4 rounded-xl shadow-md mb-6 flex items-center space-x-4">
-            <label for="brand-filter" class="text-gray-700 font-semibold">Filter by Brand:</label>
-            <select id="brand-filter" onchange="filterProducts(this.value)"
-                    class="p-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 shadow-sm md:w-64 w-full md:auto">
-                <option value="all">All Brands</option>
-            </select>
-        </div>
-
-        <!-- 1. Catalog Grid View (Default) -->
-        <div id="catalog-grid-view">
-            <div id="catalog-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Product cards injected by JS -->
+        <!-- Filter Bar -->
+        <section class="mb-6 sm:mb-8">
+            <div id="filter-bar"
+                 class="bg-white border border-gray-200 rounded-2xl px-4 sm:px-6 py-3 sm:py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 shadow-sm">
+                <div class="text-xs font-medium tracking-wide text-gray-500 uppercase">
+                    Filter
+                    <span class="mx-1 text-gray-400">•</span>
+                    <span class="text-gray-700">Brand</span>
+                </div>
+                <div>
+                    <select id="brand-filter" onchange="filterProducts(this.value)"
+                            class="w-full sm:w-56 text-sm border border-gray-300 rounded-full px-3 py-2 bg-white focus:outline-none focus:ring-1 focus:ring-gray-900 focus:border-gray-900 transition">
+                        <option value="all">All Brands</option>
+                    </select>
+                </div>
             </div>
-        </div>
+        </section>
 
-        <!-- 2. Product Details View -->
-        <div id="details-view" class="hidden-view">
+        <!-- Catalog Grid View -->
+        <section id="catalog-grid-view">
+            <div id="catalog-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7 lg:gap-8">
+                <!-- Product cards will be injected here -->
+            </div>
+        </section>
+
+        <!-- Product Details View -->
+        <section id="details-view" class="hidden-view mt-4 sm:mt-6">
             <!-- Back Button -->
-            <button onclick="showCatalogGrid()" class="flex items-center text-indigo-600 hover:text-indigo-800 transition duration-150 mb-6 font-medium">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+            <button onclick="showCatalogGrid()"
+                    class="inline-flex items-center text-xs font-medium tracking-wide uppercase text-gray-600 hover:text-gray-900 mb-4 sm:mb-6">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd"
+                          d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                          clip-rule="evenodd"/>
                 </svg>
-                Back to Catalog
+                Back to catalog
             </button>
-            <div id="product-details-container" class="bg-white rounded-xl shadow-2xl p-6 md:p-10">
-                <!-- Detailed product info injected here -->
+
+            <div id="product-details-container"
+                 class="bg-white border border-gray-200 rounded-3xl px-4 sm:px-6 lg:px-10 py-6 sm:py-8 lg:py-10 shadow-sm">
+                <!-- Injected by JS -->
             </div>
-        </div>
+        </section>
 
     </main>
 
     <script>
-        // --- CATALOG DATA ---
+        /* --------- PRODUCT DATA (unchanged logic, cleaned formatting) --------- */
         const products = [
             {
                 id: "medium_corner_zip_wallet",
@@ -429,7 +449,6 @@
                 imageUrl: "https://placehold.co/800x600/7c3aed/ffffff?text=Coach+Wallet",
             }
         ];
-        // ------------------------------------
 
         const catalogGridView = document.getElementById('catalog-grid-view');
         const detailsView = document.getElementById('details-view');
@@ -437,7 +456,6 @@
         const productDetailsContainer = document.getElementById('product-details-container');
         const brandFilterSelect = document.getElementById('brand-filter');
 
-        // Global state
         let currentProductVariants = [];
         let currentProductName = '';
         let currentSelectedVariant = null;
@@ -452,11 +470,12 @@
             detailsView.classList.add('hidden-view');
             document.getElementById('filter-bar').classList.remove('hidden-view');
             window.location.hash = '';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-        
+
         function updateOrderLink(name, color) {
             const orderLink = document.getElementById('order-link');
-            const whatsappNumber = '16179355621'; 
+            const whatsappNumber = '16179355621';
             const selectedItemName = color !== 'N/A' ? `${name} (${color})` : name;
             const whatsappMessage = `Halo, saya tertarik untuk Jastip produk ${selectedItemName}.`;
             const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
@@ -470,20 +489,24 @@
             const galleryHtml = media.map((item, index) => {
                 const activeClass = index === 0 ? 'active-gallery' : '';
                 const thumbnailSrc = item.type === 'video'
-                    ? 'https://placehold.co/100x100/4f46e5/ffffff?text=VIDEO'
+                    ? 'https://placehold.co/100x100/111827/ffffff?text=VIDEO'
                     : item.url;
+
                 const videoOverlay = item.type === 'video' ? `
-                    <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30">
-                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path>
+                    <div class="absolute inset-0 flex items-center justify-center bg-black/30">
+                        <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
+                                  clip-rule="evenodd"></path>
                         </svg>
                     </div>
                 ` : '';
 
                 return `
                     <button
-                        onclick="selectGalleryMedia(${index})" 
-                        class="gallery-thumbnail-btn w-16 h-16 rounded-lg border-2 border-transparent overflow-hidden ${activeClass} hover:border-indigo-400 transition duration-150 transform hover:scale-105 relative bg-gray-50"
+                        onclick="selectGalleryMedia(${index})"
+                        class="gallery-thumbnail-btn w-16 h-16 rounded-xl border border-gray-200 overflow-hidden ${activeClass}
+                               hover:border-gray-900 transition duration-150 transform hover:-translate-y-0.5 bg-white relative"
                         aria-label="View ${colorName} - ${item.alt}"
                         title="View ${colorName} - ${item.alt}"
                     >
@@ -501,7 +524,6 @@
             galleryContainer.innerHTML = galleryHtml;
         }
 
-        // Hover-zoom main media in details
         window.selectGalleryMedia = function(mediaIndex) {
             if (!currentSelectedVariant || !currentSelectedVariant.media) return;
 
@@ -511,15 +533,12 @@
 
             if (selectedMedia.type === 'video') {
                 mediaHtml = `
-                    <div class="relative w-full max-w-md mx-auto bg-gray-50 rounded-2xl shadow-md overflow-hidden">
-                        <div class="relative w-full pb-[125%]">
+                    <div class="relative w-full max-w-md mx-auto bg-white rounded-3xl border border-gray-200 overflow-hidden">
+                        <div class="relative w-full pb-[110%] bg-black">
                             <video
-                                controls
-                                autoplay
-                                loop
-                                muted
+                                controls autoplay loop muted
                                 src="${selectedMedia.url}"
-                                class="absolute inset-0 w-full h-full object-contain bg-black"
+                                class="absolute inset-0 w-full h-full object-contain"
                                 onerror="this.onerror=null; console.error('Video load error');"
                             >
                                 Your browser does not support the video tag.
@@ -529,13 +548,13 @@
                 `;
             } else {
                 mediaHtml = `
-                    <div class="relative w-full max-w-md mx-auto bg-gray-50 rounded-2xl shadow-md overflow-hidden">
-                        <div class="relative w-full pb-[125%]">
+                    <div class="relative w-full max-w-md mx-auto bg-white rounded-3xl border border-gray-200 overflow-hidden">
+                        <div class="relative w-full pb-[110%] bg-[#f4f2ef]">
                             <img
                                 src="${selectedMedia.url}"
                                 alt="${selectedMedia.alt ? currentProductName + ' ' + selectedMedia.alt : 'Product image'}"
                                 class="absolute inset-0 w-full h-full object-contain transition-transform duration-300 ease-out hover:scale-110"
-                                onerror="this.onerror=null; this.src='https://placehold.co/800x600/e0e0e0/333333?text=Details+Image+Missing';"
+                                onerror="this.onerror=null; this.src='https://placehold.co/800x600/e0e0e0/333333?text=Image+Missing';"
                             >
                         </div>
                     </div>
@@ -545,20 +564,16 @@
             container.innerHTML = mediaHtml;
 
             document.querySelectorAll('.gallery-thumbnail-btn').forEach((btn, index) => {
-                if (index === mediaIndex) {
-                    btn.classList.add('active-gallery');
-                } else {
-                    btn.classList.remove('active-gallery');
-                }
+                btn.classList.toggle('active-gallery', index === mediaIndex);
             });
         }
 
         window.selectVariant = function(variantId) {
             const selectedVariant = currentProductVariants.find(v => v.id === variantId);
             if (!selectedVariant) return;
-            
+
             currentSelectedVariant = selectedVariant;
-            
+
             document.querySelectorAll('.variant-thumbnail').forEach(el => {
                 el.classList.remove('active');
             });
@@ -568,14 +583,13 @@
             document.getElementById('selected-color-name').textContent = selectedVariant.color;
             document.getElementById('product-price').textContent = selectedVariant.price;
             updateOrderLink(currentProductName, selectedVariant.color);
-            
+
             renderVariantGallery(selectedVariant.media, selectedVariant.color);
             selectGalleryMedia(0);
         }
 
         window.showProductDetails = function(productId) {
             const product = getProductById(productId);
-
             if (!product) {
                 console.error('Product not found for ID:', productId);
                 showCatalogGrid();
@@ -583,7 +597,6 @@
             }
 
             currentProductName = product.name;
-
             const isVariantProduct = product.variants && product.variants.length > 0;
             const initialVariant = isVariantProduct ? product.variants[0] : null;
             currentProductVariants = product.variants || [];
@@ -591,39 +604,45 @@
 
             const initialColorName = isVariantProduct ? initialVariant.color : 'N/A';
             const initialPrice = isVariantProduct ? initialVariant.price : product.price;
-            
+
             const brandInfo = product.brand
-                ? `<p class="text-sm font-medium text-gray-500 mb-2">Brand: <span class="text-indigo-600">${product.brand}</span></p>`
+                ? `<p class="text-xs tracking-[0.2em] text-gray-500 uppercase mb-3">${product.brand}</p>`
                 : '';
 
-            const variantThumbnailHtml = isVariantProduct ? product.variants.map((variant, index) => {
-                const initialActiveClasses = index === 0 ? 'active' : '';
-                const firstImage = variant.media.find(m => m.type === 'image') || variant.media[0];
-                const thumbnailUrl = firstImage ? firstImage.url : 'https://placehold.co/100x100/e0e0e0/333333?text=N/A';
-                
-                return `
-                    <button
-                        id="variant-btn-${variant.id}"
-                        onclick="selectVariant('${variant.id}')"
-                        class="variant-thumbnail w-16 h-16 rounded-lg border-2 border-transparent overflow-hidden ${initialActiveClasses} hover:ring-2 hover:ring-indigo-300 transition duration-150 transform hover:scale-105 bg-gray-50"
-                        aria-label="Select ${variant.color} variant"
-                        title="${variant.color}"
-                    >
-                        <img
-                            src="${thumbnailUrl}"
-                            alt="${variant.color} thumbnail"
-                            class="w-full h-full object-contain"
-                            onerror="this.onerror=null; this.src='https://placehold.co/100x100/e0e0e0/333333?text=N/A';"
-                        />
-                    </button>
-                `;
-            }).join('') : '';
+            const variantThumbnailHtml = isVariantProduct
+                ? product.variants.map((variant, index) => {
+                    const firstImage = variant.media.find(m => m.type === 'image') || variant.media[0];
+                    const thumbnailUrl = firstImage ? firstImage.url : 'https://placehold.co/100x100/e0e0e0/333333?text=N/A';
+                    const activeClass = index === 0 ? 'active' : '';
+
+                    return `
+                        <button
+                            id="variant-btn-${variant.id}"
+                            onclick="selectVariant('${variant.id}')"
+                            class="variant-thumbnail w-16 h-16 rounded-xl border border-gray-200 overflow-hidden ${activeClass}
+                                   hover:border-gray-900 transition duration-150 bg-white"
+                            aria-label="Select ${variant.color}"
+                            title="${variant.color}"
+                        >
+                            <img
+                                src="${thumbnailUrl}"
+                                alt="${variant.color} thumbnail"
+                                class="w-full h-full object-contain"
+                                onerror="this.onerror=null; this.src='https://placehold.co/100x100/e0e0e0/333333?text=N/A';"
+                            />
+                        </button>
+                    `;
+                }).join('')
+                : '';
 
             const variantSelector = isVariantProduct ? `
                 <div class="mb-6">
-                    <h4 class="text-lg font-semibold text-gray-800 mb-2">
-                        Color: <span id="selected-color-name" class="font-normal text-indigo-600">${initialColorName}</span>
-                    </h4>
+                    <div class="flex items-baseline justify-between mb-2">
+                        <h4 class="text-sm font-medium text-gray-800">
+                            Color
+                            <span class="ml-2 text-gray-500 font-normal" id="selected-color-name">${initialColorName}</span>
+                        </h4>
+                    </div>
                     <div class="flex flex-wrap gap-3">
                         ${variantThumbnailHtml}
                     </div>
@@ -631,34 +650,40 @@
             ` : '';
 
             const detailHtml = `
-                <div class="md:flex md:space-x-10">
-                    
-                    <!-- Image Column -->
+                <div class="md:flex md:space-x-10 lg:space-x-12">
+                    <!-- Left: Media -->
                     <div class="md:w-1/2 mb-6 md:mb-0 flex">
-                        ${isVariantProduct ? `<div id="image-gallery-thumbnails" class="flex flex-col space-y-3 mr-4"></div>` : ''}
-
-                        <!-- Main media container (JS injects image/video with hover zoom) -->
-                        <div id="main-product-media-container" class="w-full flex-1">
-                        </div>
+                        ${isVariantProduct ? `
+                            <div id="image-gallery-thumbnails" class="hidden sm:flex flex-col space-y-3 mr-4"></div>
+                        ` : ''}
+                        <div id="main-product-media-container" class="w-full flex-1"></div>
                     </div>
 
-                    <!-- Details Column -->
+                    <!-- Right: Info -->
                     <div class="md:w-1/2">
-                        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">${product.name}</h2>
                         ${brandInfo}
+                        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-semibold text-gray-900 mb-4"
+                            style="font-family: 'Playfair Display', serif;">
+                            ${product.name}
+                        </h2>
+
                         ${variantSelector}
-                        <p id="product-price" class="text-3xl font-extrabold text-indigo-700 mb-6">${initialPrice}</p>
-                        
-                        <!-- ORDER BUTTON -->
-                        <div class="mt-8 pt-4 border-t border-gray-200">
-                            <h3 class="text-xl font-bold text-gray-900 mb-4">Tertarik?</h3>
-                            <p class="text-gray-600 mb-4">Hubungi nomor WA di bawah ini.</p>
-                            
-                            <a href="#" id="order-link" target="_blank" class="inline-flex items-center justify-center w-full md:w-auto px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-green-500 hover:bg-green-600 transition duration-150 shadow-xl transform hover:scale-[1.01]">
-                                Hubungi
+
+                        <p id="product-price"
+                           class="text-2xl sm:text-3xl font-semibold tracking-wide text-gray-900 mb-6">
+                            ${initialPrice}
+                        </p>
+
+                        <div class="mt-6 pt-6 border-t border-gray-200">
+                            <p class="text-xs tracking-[0.2em] text-gray-500 uppercase mb-3">Order via WhatsApp</p>
+                            <p class="text-sm text-gray-600 mb-4">
+                                Kirim pesan ke kami untuk cek ketersediaan dan estimasi total Jastip.
+                            </p>
+                            <a href="#" id="order-link" target="_blank"
+                               class="inline-flex items-center justify-center px-6 py-2.5 rounded-full border border-gray-900 text-sm font-medium text-gray-900 hover:bg-gray-900 hover:text-white transition duration-150">
+                                Hubungi via WhatsApp
                             </a>
                         </div>
-
                     </div>
                 </div>
             `;
@@ -678,8 +703,8 @@
             } else {
                 const container = document.getElementById('main-product-media-container');
                 container.innerHTML = `
-                    <div class="relative w-full max-w-md mx-auto bg-gray-50 rounded-2xl shadow-md overflow-hidden">
-                        <div class="relative w-full pb-[125%]">
+                    <div class="relative w-full max-w-md mx-auto bg-white rounded-3xl border border-gray-200 overflow-hidden">
+                        <div class="relative w-full pb-[110%] bg-[#f4f2ef]">
                             <img
                                 src="${product.imageUrl}"
                                 alt="${product.name}"
@@ -691,7 +716,6 @@
             }
         }
 
-        // Coach-style card thumbnails in catalog
         function createProductCard(product) {
             let cardImageUrl = product.imageUrl;
             let cardPrice = product.price;
@@ -701,58 +725,56 @@
                 if (firstMedia && firstMedia.type === 'image') {
                     cardImageUrl = firstMedia.url;
                 } else if (firstMedia && firstMedia.type === 'video') {
-                    cardImageUrl = 'https://placehold.co/600x400/4f46e5/ffffff?text=Video+Available';
+                    cardImageUrl = 'https://placehold.co/600x600/111827/ffffff?text=Video';
                 }
                 cardPrice = product.variants[0].price;
             }
-            
-            const brandName = product.brand || 'Misc.';
+
+            const brandName = (product.brand || 'Misc.').toUpperCase();
 
             return `
-                <div class="bg-white rounded-2xl shadow-sm hover:shadow-md transition duration-300 transform hover:-translate-y-1 group">
-                    <!-- Square image area, Coach/Apple style -->
-                    <div class="relative w-full pb-[100%] bg-white rounded-t-2xl overflow-hidden border border-gray-100">
+                <div class="bg-white border border-gray-200 rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition duration-300 group">
+                    <!-- Image -->
+                    <div class="relative w-full pb-[100%] bg-[#f8f7f5]">
                         <img
                             src="${cardImageUrl}"
                             alt="Image of ${product.name}"
-                            class="absolute inset-0 w-full h-full object-contain p-4 transition-transform duration-300 ease-out group-hover:scale-105"
+                            class="absolute inset-0 w-full h-full object-contain p-6 transition-transform duration-300 ease-out group-hover:scale-105"
                             onerror="this.onerror=null; this.src='https://placehold.co/600x600/e0e0e0/333333?text=Image+Not+Found';"
                         >
                     </div>
 
-                    <!-- Text -->
-                    <div class="p-4">
-                        <p class="text-xs font-semibold tracking-wide text-gray-500 uppercase mb-1">${brandName}</p>
+                    <!-- Content -->
+                    <div class="px-4 pt-4 pb-3">
+                        <p class="text-[10px] tracking-[0.25em] text-gray-500 mb-1">${brandName}</p>
                         <h2 class="text-sm font-medium text-gray-900 mb-1 line-clamp-2">${product.name}</h2>
-                        <p class="text-indigo-600 text-base font-semibold mt-2">${cardPrice}</p>
+                        <p class="text-sm font-semibold text-gray-900 mt-2">${cardPrice}</p>
                     </div>
 
                     <!-- Button -->
                     <div class="px-4 pb-4">
-                        <button onclick="showProductDetails('${product.id}')"
-                            class="w-full py-2.5 bg-indigo-500 text-white text-sm font-medium rounded-lg hover:bg-indigo-600 transition duration-150 shadow-sm">
-                            View Details
+                        <button
+                            onclick="showProductDetails('${product.id}')"
+                            class="w-full py-2.5 text-xs font-medium rounded-full border border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white transition duration-150">
+                            View details
                         </button>
                     </div>
                 </div>
             `;
         }
-        
+
         window.filterProducts = function(brandName) {
             activeFilter = brandName;
-            
             const filteredProducts = products.filter(product => {
                 if (brandName === 'all') return true;
                 return product.brand && product.brand.toLowerCase() === brandName.toLowerCase();
             });
-            
             renderCatalog(filteredProducts);
         }
 
         function renderCatalog(productList = products) {
             if (!catalogGrid) return;
-            const catalogHtml = productList.map(createProductCard).join('');
-            catalogGrid.innerHTML = catalogHtml;
+            catalogGrid.innerHTML = productList.map(createProductCard).join('');
         }
 
         function populateBrandFilter() {
@@ -762,7 +784,6 @@
             });
 
             brandFilterSelect.innerHTML = '<option value="all">All Brands</option>';
-            
             Array.from(brands).sort().forEach(brand => {
                 const option = document.createElement('option');
                 option.value = brand;
@@ -786,11 +807,8 @@
             checkInitialHash();
         });
 
-        window.addEventListener('hashchange', () => {
-            checkInitialHash();
-        });
+        window.addEventListener('hashchange', checkInitialHash);
     </script>
 
 </body>
 </html>
-
