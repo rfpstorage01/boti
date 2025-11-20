@@ -44,12 +44,11 @@
 
     <main class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
 
-        <!-- 0. Filter Bar (New Addition) -->
+        <!-- 0. Filter Bar -->
         <div id="filter-bar" class="bg-white p-4 rounded-xl shadow-md mb-6 flex items-center space-x-4">
             <label for="brand-filter" class="text-gray-700 font-semibold">Filter by Brand:</label>
             <select id="brand-filter" onchange="filterProducts(this.value)"
                     class="p-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 shadow-sm md:w-64 w-full md:auto">
-                <!-- Options will be populated by JavaScript -->
                 <option value="all">All Brands</option>
             </select>
         </div>
@@ -57,11 +56,11 @@
         <!-- 1. Catalog Grid View (Default) -->
         <div id="catalog-grid-view">
             <div id="catalog-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Product cards will be injected here by JavaScript -->
+                <!-- Product cards injected by JS -->
             </div>
         </div>
 
-        <!-- 2. Product Details View (Hidden by default) -->
+        <!-- 2. Product Details View -->
         <div id="details-view" class="hidden-view">
             <!-- Back Button -->
             <button onclick="showCatalogGrid()" class="flex items-center text-indigo-600 hover:text-indigo-800 transition duration-150 mb-6 font-medium">
@@ -71,38 +70,38 @@
                 Back to Catalog
             </button>
             <div id="product-details-container" class="bg-white rounded-xl shadow-2xl p-6 md:p-10">
-                <!-- Detailed product information will be injected here -->
+                <!-- Detailed product info injected here -->
             </div>
         </div>
 
     </main>
 
     <script>
-        // --- MOCK CATALOG DATA (Price included in variants for dynamic updates) ---
-        // Brand field added to each product
+        // --- CATALOG DATA ---
         const products = [
             {
                 id: "medium_corner_zip_wallet",
                 name: "Coach - Medium Corner Zip Wallet",
-                brand: "Coach", // NEW FIELD
+                brand: "Coach",
                 price: "Rp -",
                 variants: [
                     {
                         id: "medium_corner_zip_wallet_1",
                         color: "gold/maple",
                         price: "Rp -",
-                        media: [ // ARRAY OF MEDIA OBJECTS (images and videos)
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cr791_immpl_a0?$desktopProductTile$", alt: "image1" },
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cr791_immpl_a8?$desktopProductTile$", alt: "image2" },
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cr791_immpl_a91?$desktopProductTile$", alt: "image3" },                        ],
+                        media: [
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cr791_immpl_a0?$desktopProductTile$", alt: "Front" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cr791_immpl_a8?$desktopProductTile$", alt: "Angle" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cr791_immpl_a91?$desktopProductTile$", alt: "Inside" },
+                        ],
                     },
                     {
                         id: "medium_corner_zip_wallet_2",
                         color: "gold/black",
                         price: "Rp -",
                         media: [
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/6390_imblk_a0?$desktopProductTile$", alt: "image1" }, 
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/6390_imblk_a8?$desktopProductTile$", alt: "image2" }, 
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/6390_imblk_a0?$desktopProductTile$", alt: "Front" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/6390_imblk_a8?$desktopProductTile$", alt: "Angle" },
                         ],
                     },
                     {
@@ -110,8 +109,8 @@
                         color: "gold/chalk",
                         price: "Rp -",
                         media: [
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/6390_imchk_a0?$desktopProductTile$", alt: "image1" }, 
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/6390_imchk_a8?$desktopProductTile$", alt: "image2" }, 
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/6390_imchk_a0?$desktopProductTile$", alt: "Front" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/6390_imchk_a8?$desktopProductTile$", alt: "Angle" },
                         ],
                     },
                     {
@@ -119,8 +118,8 @@
                         color: "silver/light black",
                         price: "Rp -",
                         media: [
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/6390_svdtv_a0?$desktopProductTile$", alt: "image1" }, 
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/6390_svdtv_a8?$desktopProductTile$", alt: "image2" }, 
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/6390_svdtv_a0?$desktopProductTile$", alt: "Front" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/6390_svdtv_a8?$desktopProductTile$", alt: "Angle" },
                         ],
                     },
                     {
@@ -128,9 +127,9 @@
                         color: "gold/true red",
                         price: "Rp -",
                         media: [
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cbo41_imdn8_a0?$desktopProductTile$", alt: "image1" },
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cbo41_imdn8_a8?$desktopProductTile$", alt: "image2" },
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cbo41_imdn8_a91?$desktopProductTile$", alt: "image2" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cbo41_imdn8_a0?$desktopProductTile$", alt: "Front" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cbo41_imdn8_a8?$desktopProductTile$", alt: "Angle" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cbo41_imdn8_a91?$desktopProductTile$", alt: "Inside" },
                         ],
                     },
                     {
@@ -138,9 +137,9 @@
                         color: "gunmetalk",
                         price: "Rp -",
                         media: [
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cbo41_qbcbd_a0?$desktopProductTile$", alt: "image1" },
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cbo41_qbcbd_a8?$desktopProductTile$", alt: "image2" },
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cbo41_qbcbd_a91?$desktopProductTile$", alt: "image2" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cbo41_qbcbd_a0?$desktopProductTile$", alt: "Front" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cbo41_qbcbd_a8?$desktopProductTile$", alt: "Angle" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cbo41_qbcbd_a91?$desktopProductTile$", alt: "Inside" },
                         ],
                     },
                     {
@@ -148,9 +147,9 @@
                         color: "gold",
                         price: "Rp -",
                         media: [
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cbo41_imorx_a0?$desktopProductTile$", alt: "image1" }, 
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cbo41_imorx_a8?$desktopProductTile$", alt: "image2" }, 
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cbo41_imorx_a91?$desktopProductTile$", alt: "image3" }, 
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cbo41_imorx_a0?$desktopProductTile$", alt: "Front" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cbo41_imorx_a8?$desktopProductTile$", alt: "Angle" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cbo41_imorx_a91?$desktopProductTile$", alt: "Inside" },
                         ],
                     },
                     {
@@ -158,9 +157,9 @@
                         color: "silver",
                         price: "Rp -",
                         media: [
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cbo41_svp3k_a0?$desktopProductTile$", alt: "image1" }, 
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cbo41_svp3k_a8?$desktopProductTile$", alt: "image2" },
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cbo41_svp3k_a91?$desktopProductTile$", alt: "image3" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cbo41_svp3k_a0?$desktopProductTile$", alt: "Front" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cbo41_svp3k_a8?$desktopProductTile$", alt: "Angle" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cbo41_svp3k_a91?$desktopProductTile$", alt: "Inside" },
                         ],
                     },
                     {
@@ -168,9 +167,9 @@
                         color: "silver/dark black",
                         price: "Rp -",
                         media: [
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cbo41_svbk_a0?$desktopProductTile$", alt: "image1" }, 
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cbo41_svbk_a8?$desktopProductTile$", alt: "image2" },
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cbo41_svbk_a91?$desktopProductTile$", alt: "image3" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cbo41_svbk_a0?$desktopProductTile$", alt: "Front" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cbo41_svbk_a8?$desktopProductTile$", alt: "Angle" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cbo41_svbk_a91?$desktopProductTile$", alt: "Inside" },
                         ],
                     },
                     {
@@ -178,9 +177,9 @@
                         color: "gold/grey birch",
                         price: "Rp -",
                         media: [
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cbo41_imc2j_a0?$desktopProductTile$", alt: "image1" }, 
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cbo41_imc2j_a8?$desktopProductTile$", alt: "image2" },
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cbo41_imc2j_a91?$desktopProductTile$", alt: "image3" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cbo41_imc2j_a0?$desktopProductTile$", alt: "Front" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cbo41_imc2j_a8?$desktopProductTile$", alt: "Angle" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cbo41_imc2j_a91?$desktopProductTile$", alt: "Inside" },
                         ],
                     },
                     {
@@ -188,20 +187,20 @@
                         color: "silver/red",
                         price: "Rp -",
                         media: [
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cbo41_svpm_a0?$desktopProductTile$", alt: "image1" }, 
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cbo41_svpm_a8?$desktopProductTile$", alt: "image2" },
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cbo41_svpm_a91?$desktopProductTile$", alt: "image3" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cbo41_svpm_a0?$desktopProductTile$", alt: "Front" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cbo41_svpm_a8?$desktopProductTile$", alt: "Angle" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cbo41_svpm_a91?$desktopProductTile$", alt: "Inside" },
                         ],
                     },
-                                        {
+                    {
                         id: "medium_corner_zip_wallet_12",
                         color: "gold/tan",
                         price: "Rp -",
                         media: [
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cbo32_imtn2_a0?$desktopProductTile$", alt: "image1" }, 
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cbo32_imtn2_a8?$desktopProductTile$", alt: "image2" }, 
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cbo32_imtn2_a91?$desktopProductTile$", alt: "image3" }, 
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cbo32_imtn2_a99?$desktopProductTile$", alt: "image4" }, 
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cbo32_imtn2_a0?$desktopProductTile$", alt: "Front" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cbo32_imtn2_a8?$desktopProductTile$", alt: "Angle" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cbo32_imtn2_a91?$desktopProductTile$", alt: "Inside" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cbo32_imtn2_a99?$desktopProductTile$", alt: "Detail" },
                         ],
                     },
                     {
@@ -209,10 +208,10 @@
                         color: "silver/black",
                         price: "Rp -",
                         media: [
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw526_svbk_a0?$desktopProductTile$", alt: "image1" }, 
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw526_svbk_a8?$desktopProductTile$", alt: "image2" }, 
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw526_svbk_a82?$desktopProductTile$", alt: "image3" }, 
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw526_svbk_a91?$desktopProductTile$", alt: "image4" }, 
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw526_svbk_a0?$desktopProductTile$", alt: "Front" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw526_svbk_a8?$desktopProductTile$", alt: "Angle" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw526_svbk_a82?$desktopProductTile$", alt: "Inside" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw526_svbk_a91?$desktopProductTile$", alt: "Detail" },
                         ],
                     },
                 ]
@@ -220,17 +219,17 @@
             {
                 id: "medium_corner_zip_wallet_in_signature",
                 name: "Coach - Medium Corner Zip Wallet in Signature",
-                brand: "Coach", // NEW FIELD
+                brand: "Coach",
                 price: "Rp -",
                 variants: [
                     {
                         id: "medium_corner_zip_wallet_in_signature_1",
                         color: "gold/walnut/black",
                         price: "Rp -",
-                        media: [ // ARRAY OF MEDIA OBJECTS (images and videos)
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw786_imxaq_a0?$desktopProductTile$", alt: "image1" },
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw786_imxaq_a8?$desktopProductTile$", alt: "image2" },
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw786_imxaq_a91?$desktopProductTile$", alt: "image3" },
+                        media: [
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw786_imxaq_a0?$desktopProductTile$", alt: "Front" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw786_imxaq_a8?$desktopProductTile$", alt: "Angle" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw786_imxaq_a91?$desktopProductTile$", alt: "Inside" },
                         ],
                     },
                     {
@@ -238,9 +237,9 @@
                         color: "gold/sand/chalk",
                         price: "Rp -",
                         media: [
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw786_imxdm_a0?$desktopProductTile$", alt: "image1" },
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw786_imxdm_a8?$desktopProductTile$", alt: "image2" },
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw786_imxdm_a91?$desktopProductTile$", alt: "image3" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw786_imxdm_a0?$desktopProductTile$", alt: "Front" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw786_imxdm_a8?$desktopProductTile$", alt: "Angle" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw786_imxdm_a91?$desktopProductTile$", alt: "Inside" },
                         ],
                     },
                     {
@@ -248,9 +247,9 @@
                         color: "gunmetal/charcoal/black",
                         price: "Rp -",
                         media: [
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw786_qbmi5_a0?$desktopProductTile$", alt: "image1" },
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw786_qbmi5_a8?$desktopProductTile$", alt: "image2" },
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw786_qbmi5_a91?$desktopProductTile$", alt: "image3" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw786_qbmi5_a0?$desktopProductTile$", alt: "Front" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw786_qbmi5_a8?$desktopProductTile$", alt: "Angle" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw786_qbmi5_a91?$desktopProductTile$", alt: "Inside" },
                         ],
                     },
                     {
@@ -258,9 +257,9 @@
                         color: "silver/sand/cream",
                         price: "Rp -",
                         media: [
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw786_svpwh_a0?$desktopProductTile$", alt: "image1" },
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw786_svpwh_a8?$desktopProductTile$", alt: "image2" },
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw786_svpwh_a91?$desktopProductTile$", alt: "image3" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw786_svpwh_a0?$desktopProductTile$", alt: "Front" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw786_svpwh_a8?$desktopProductTile$", alt: "Angle" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw786_svpwh_a91?$desktopProductTile$", alt: "Inside" },
                         ],
                     },
                     {
@@ -268,9 +267,9 @@
                         color: "gold/tan/black",
                         price: "Rp -",
                         media: [
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw786_imqrx_a0?$desktopProductTile$", alt: "image1" },
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw786_imqrx_a8?$desktopProductTile$", alt: "image2" },
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw786_imqrx_a91?$desktopProductTile$", alt: "image3" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw786_imqrx_a0?$desktopProductTile$", alt: "Front" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw786_imqrx_a8?$desktopProductTile$", alt: "Angle" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw786_imqrx_a91?$desktopProductTile$", alt: "Inside" },
                         ],
                     },
                     {
@@ -278,9 +277,9 @@
                         color: "gold/tan/brown",
                         price: "Rp -",
                         media: [
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw786_imxhe_a0?$desktopProductTile$", alt: "image1" },
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw786_imxhe_a8?$desktopProductTile$", alt: "image2" },
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw786_imxhe_a91?$desktopProductTile$", alt: "image3" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw786_imxhe_a0?$desktopProductTile$", alt: "Front" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw786_imxhe_a8?$desktopProductTile$", alt: "Angle" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw786_imxhe_a91?$desktopProductTile$", alt: "Inside" },
                         ],
                     },
                     {
@@ -288,9 +287,9 @@
                         color: "gold/white/chalk",
                         price: "Rp -",
                         media: [
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw786_imxu5_a0?$desktopProductTile$", alt: "image1" },
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw786_imxu5_a8?$desktopProductTile$", alt: "image2" },
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw786_imxu5_a91?$desktopProductTile$", alt: "image3" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw786_imxu5_a0?$desktopProductTile$", alt: "Front" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw786_imxu5_a8?$desktopProductTile$", alt: "Angle" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw786_imxu5_a91?$desktopProductTile$", alt: "Inside" },
                         ],
                     },
                     {
@@ -298,9 +297,9 @@
                         color: "silver/brown/pink",
                         price: "Rp -",
                         media: [
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw786_svygg_a0?$desktopProductTile$", alt: "image1" },
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw786_svygg_a8?$desktopProductTile$", alt: "image2" },
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw786_svygg_a91?$desktopProductTile$", alt: "image3" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw786_svygg_a0?$desktopProductTile$", alt: "Front" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw786_svygg_a8?$desktopProductTile$", alt: "Angle" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw786_svygg_a91?$desktopProductTile$", alt: "Inside" },
                         ],
                     },
                     {
@@ -308,9 +307,9 @@
                         color: "gold/black/red",
                         price: "Rp -",
                         media: [
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw786_imyly_a0?$desktopProductTile$", alt: "image1" },
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw786_imyly_a8?$desktopProductTile$", alt: "image2" },
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw786_imyly_a91?$desktopProductTile$", alt: "image3" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw786_imyly_a0?$desktopProductTile$", alt: "Front" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw786_imyly_a8?$desktopProductTile$", alt: "Angle" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw786_imyly_a91?$desktopProductTile$", alt: "Inside" },
                         ],
                     },
                     {
@@ -318,9 +317,9 @@
                         color: "gold/navy/midnight navy jacquard",
                         price: "Rp -",
                         media: [
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cu987_imx1x_a0?$desktopProductTile$", alt: "image1" },
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cu987_imx1x_a8?$desktopProductTile$", alt: "image2" },
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cu987_imx1x_a91?$desktopProductTile$", alt: "image3" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cu987_imx1x_a0?$desktopProductTile$", alt: "Front" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cu987_imx1x_a8?$desktopProductTile$", alt: "Angle" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cu987_imx1x_a91?$desktopProductTile$", alt: "Inside" },
                         ],
                     },
                     {
@@ -328,46 +327,46 @@
                         color: "gold/sand multi with floral print",
                         price: "Rp -",
                         media: [
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/car13_imsas_a0?$desktopProductTile$", alt: "image1" },
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/car13_imsas_a8?$desktopProductTile$", alt: "image2" },
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/car13_imsas_a82?$desktopProductTile$", alt: "image3" },
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/car13_imsas_a91?$desktopProductTile$", alt: "image4" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/car13_imsas_a0?$desktopProductTile$", alt: "Front" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/car13_imsas_a8?$desktopProductTile$", alt: "Angle" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/car13_imsas_a82?$desktopProductTile$", alt: "Inside" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/car13_imsas_a91?$desktopProductTile$", alt: "Detail" },
                         ],
                     },
-                                        {
+                    {
                         id: "medium_corner_zip_wallet_in_signature_12",
                         color: "gold/light khaki chalk multi with floral print",
                         price: "Rp -",
                         media: [
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cr968_imotv_a0?$desktopProductTile$", alt: "image1" },
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cr968_imotv_a8?$desktopProductTile$", alt: "image2" },
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cr968_imotv_a82?$desktopProductTile$", alt: "image3" },
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cr968_imotv_a91?$desktopProductTile$", alt: "image4" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cr968_imotv_a0?$desktopProductTile$", alt: "Front" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cr968_imotv_a8?$desktopProductTile$", alt: "Angle" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cr968_imotv_a82?$desktopProductTile$", alt: "Inside" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cr968_imotv_a91?$desktopProductTile$", alt: "Detail" },
                             { type: 'video', url: "https://assets.coach.com/na/media/EOS/pdp/C0082_SVV7Q_Med_Crn_Zip.mp4", alt: "360 Spin" },
                         ],
                     },
                 ]
-            },            
+            },
             {
                 id: "nolita_19",
                 name: "Coach - Nolita 19",
-                brand: "Coach", // NEW FIELD
+                brand: "Coach",
                 price: "Rp 2.500.000",
                 variants: [
                     {
                         id: "nolita_19_1",
                         color: "signature canvas/Gold/Sand/Chalk",
                         price: "Rp 2.500.000",
-                        media: [ // ARRAY OF MEDIA OBJECTS (images and videos)
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw426_imxdm_a0?$desktopProduct$", alt: "image1" }, 
-                            { type: 'video', url: "https://assets.coach.com/na/media/pdp/spin_cw426_imxdm_v2_p3.mp4", alt: "360 Spin" }, 
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw426_imxdm_a99?$desktopProduct$", alt: "image2" },
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw426_imxdm_a10?$desktopProduct$", alt: "image3" },
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw426_imxdm_a6?$desktopProduct$", alt: "image4" },
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw426_imxdm_a8?$desktopProduct$", alt: "image5" },
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw426_imxdm_a3?$desktopProduct$", alt: "image6" },
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw426_imxdm_a92?$desktopProduct$", alt: "image7" },
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw426_imxdm_a91?$desktopProduct$", alt: "image8" },
+                        media: [
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw426_imxdm_a0?$desktopProduct$", alt: "Front" },
+                            { type: 'video', url: "https://assets.coach.com/na/media/pdp/spin_cw426_imxdm_v2_p3.mp4", alt: "360 Spin" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw426_imxdm_a99?$desktopProduct$", alt: "Angle" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw426_imxdm_a10?$desktopProduct$", alt: "Inside" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw426_imxdm_a6?$desktopProduct$", alt: "Detail 1" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw426_imxdm_a8?$desktopProduct$", alt: "Detail 2" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw426_imxdm_a3?$desktopProduct$", alt: "Back" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw426_imxdm_a92?$desktopProduct$", alt: "Strap" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cw426_imxdm_a91?$desktopProduct$", alt: "On model" },
                         ],
                     },
                     {
@@ -375,9 +374,9 @@
                         color: "smooth leather/Gold",
                         price: "Rp 2.650.000",
                         media: [
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cci92_immrn_a0?$desktopProduct$", alt: "Smooth Leather Primary" }, 
-                            { type: 'image', url: "https://placehold.co/800x600/4c0519/ffffff?text=Smooth+Leather+Side+View", alt: "Smooth Leather Side" },
-                            { type: 'image', url: "https://placehold.co/800x600/4c0519/ffffff?text=Smooth+Leather+Back", alt: "Smooth Leather Back" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/cci92_immrn_a0?$desktopProduct$", alt: "Front" },
+                            { type: 'image', url: "https://placehold.co/800x600/4c0519/ffffff?text=Smooth+Leather+Side+View", alt: "Side" },
+                            { type: 'image', url: "https://placehold.co/800x600/4c0519/ffffff?text=Smooth+Leather+Back", alt: "Back" },
                         ],
                     },
                     {
@@ -385,8 +384,8 @@
                         color: "novelty leather/Silver",
                         price: "Rp 2.700.000",
                         media: [
-                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/ccf58_sva47_a0?$desktopProduct$", alt: "Novelty Leather Primary" }, 
-                            { type: 'image', url: "https://placehold.co/800x600/1e40af/ffffff?text=Novelty+Detail+1", alt: "Novelty Detail 1" },
+                            { type: 'image', url: "https://coach.scene7.com/is/image/Coach/ccf58_sva47_a0?$desktopProduct$", alt: "Front" },
+                            { type: 'image', url: "https://placehold.co/800x600/1e40af/ffffff?text=Novelty+Detail+1", alt: "Detail" },
                         ],
                     },
                 ]
@@ -394,38 +393,38 @@
             {
                 id: "tj_large_tottebage",
                 name: "Trader Joes Large Tote Shopping Bag Cotton Canvas Embroidered Bag",
-                brand: "Trader Joe's", // NEW FIELD
+                brand: "Trader Joe's",
                 price: "Rp 250.000",
                 variants: [
                     {
                         id: "tj_large_tottebage_1",
                         color: "navy blue",
                         price: "Rp 250.000",
-                        media: [ // ARRAY OF MEDIA OBJECTS (images and videos)
-                            { type: 'image', url: "https://i5.walmartimages.com/seo/Trader-Joes-Large-Tote-Shopping-Bag-Cotton-Canvas-Embroidered-Bag-1-Navy-Blue_19a3bf93-5e46-4bf3-a5c6-217d50472c87.ddf093bc469995bb0b2e2790d812cfa0.jpeg?odnHeight=2000&odnWidth=2000&odnBg=FFFFFF", alt: "image1" }, 
-                            { type: 'image', url: "https://i5.walmartimages.com/asr/805a7ae0-d459-475e-809c-622a78c53f47.bf35b14d1effc02daef5796551d81541.jpeg?odnHeight=2000&odnWidth=2000&odnBg=FFFFFF", alt: "image2" },
+                        media: [
+                            { type: 'image', url: "https://i5.walmartimages.com/seo/Trader-Joes-Large-Tote-Shopping-Bag-Cotton-Canvas-Embroidered-Bag-1-Navy-Blue_19a3bf93-5e46-4bf3-a5c6-217d50472c87.ddf093bc469995bb0b2e2790d812cfa0.jpeg?odnHeight=2000&odnWidth=2000&odnBg=FFFFFF", alt: "Front" },
+                            { type: 'image', url: "https://i5.walmartimages.com/asr/805a7ae0-d459-475e-809c-622a78c53f47.bf35b14d1effc02daef5796551d81541.jpeg?odnHeight=2000&odnWidth=2000&odnBg=FFFFFF", alt: "Angle" },
                         ],
                     },
-                ]                        
+                ]
             },
             {
                 id: "zenith-smartwatch",
                 name: "Zenith Smartwatch (Series 3)",
-                brand: "Apple", // NEW FIELD
+                brand: "Apple",
                 price: "$199.50",
                 imageUrl: "https://placehold.co/800x600/10b981/ffffff?text=Zenith+Watch+Details",
             },
             {
                 id: "luna-lamp",
                 name: "Luna Desk Lamp",
-                brand: "IKEA", // NEW FIELD
+                brand: "IKEA",
                 price: "$65.00",
                 imageUrl: "https://placehold.co/800x600/fbbf24/101010?text=Luna+Lamp+Details",
             },
             {
                 id: "coach-wallet",
                 name: "Coach Slim Wallet",
-                brand: "Coach", // NEW FIELD
+                brand: "Coach",
                 price: "Rp 1.200.000",
                 imageUrl: "https://placehold.co/800x600/7c3aed/ffffff?text=Coach+Wallet",
             }
@@ -436,82 +435,62 @@
         const detailsView = document.getElementById('details-view');
         const catalogGrid = document.getElementById('catalog-grid');
         const productDetailsContainer = document.getElementById('product-details-container');
-        const brandFilterSelect = document.getElementById('brand-filter'); // Reference to the new filter
+        const brandFilterSelect = document.getElementById('brand-filter');
 
-        // Global state to track current product selection
+        // Global state
         let currentProductVariants = [];
         let currentProductName = '';
         let currentSelectedVariant = null;
-        let activeFilter = 'all'; // New state for the active filter
+        let activeFilter = 'all';
 
-        /**
-         * Finds a product object by its unique ID.
-         */
         function getProductById(id) {
             return products.find(p => p.id === id);
         }
 
-        /**
-         * Switches the view to show the main catalog grid.
-         */
         function showCatalogGrid() {
             catalogGridView.classList.remove('hidden-view');
             detailsView.classList.add('hidden-view');
-            document.getElementById('filter-bar').classList.remove('hidden-view'); // Show filter bar
+            document.getElementById('filter-bar').classList.remove('hidden-view');
             window.location.hash = '';
         }
         
-        /**
-         * Updates the WhatsApp order link based on the selected product and variant.
-         */
         function updateOrderLink(name, color) {
             const orderLink = document.getElementById('order-link');
-            
-            // !! IMPORTANT: REPLACE '1000000000' with your actual WhatsApp number including country code (e.g., 628xxxxxxx) !!
             const whatsappNumber = '16179355621'; 
-            
             const selectedItemName = color !== 'N/A' ? `${name} (${color})` : name;
-            
             const whatsappMessage = `Halo, saya tertarik untuk Jastip produk ${selectedItemName}.`;
-            
             const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
             orderLink.href = whatsappUrl;
         }
 
-        /**
-         * Renders the small media gallery for the currently selected variant.
-         */
         function renderVariantGallery(media, colorName) {
             const galleryContainer = document.getElementById('image-gallery-thumbnails');
             if (!galleryContainer) return;
 
             const galleryHtml = media.map((item, index) => {
                 const activeClass = index === 0 ? 'active-gallery' : '';
-                
-                // Use the image URL if it's an image, or a custom placeholder for video
                 const thumbnailSrc = item.type === 'video'
-                    ? 'https://placehold.co/100x100/4f46e5/ffffff?text=VIDEO' 
+                    ? 'https://placehold.co/100x100/4f46e5/ffffff?text=VIDEO'
                     : item.url;
-                
-                // Add a video icon overlay if it's a video
                 const videoOverlay = item.type === 'video' ? `
                     <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30">
-                           <!-- Play Icon SVG -->
-                         <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg>
+                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path>
+                        </svg>
                     </div>
                 ` : '';
 
                 return `
                     <button
                         onclick="selectGalleryMedia(${index})" 
-                        class="gallery-thumbnail-btn w-16 h-16 rounded-lg border-2 border-transparent overflow-hidden ${activeClass} hover:border-indigo-400 transition duration-150 transform hover:scale-105 relative"
+                        class="gallery-thumbnail-btn w-16 h-16 rounded-lg border-2 border-transparent overflow-hidden ${activeClass} hover:border-indigo-400 transition duration-150 transform hover:scale-105 relative bg-gray-50"
                         aria-label="View ${colorName} - ${item.alt}"
                         title="View ${colorName} - ${item.alt}"
                     >
                         <img
                             src="${thumbnailSrc}"
                             alt="${item.alt} thumbnail"
-                            class="w-full h-full object-cover opacity-80"
+                            class="w-full h-full object-contain"
                             onerror="this.onerror=null; this.src='https://placehold.co/100x100/e0e0e0/333333?text=View';"
                         />
                         ${videoOverlay}
@@ -522,48 +501,49 @@
             galleryContainer.innerHTML = galleryHtml;
         }
 
-        /**
-         * Updates the main product view when a gallery thumbnail is clicked.
-         * Switches between <img> and <video> elements.
-         * @param {number} mediaIndex - The index of the media item in the currentSelectedVariant.media array.
-         */
+        // Hover-zoom main media in details
         window.selectGalleryMedia = function(mediaIndex) {
             if (!currentSelectedVariant || !currentSelectedVariant.media) return;
 
             const selectedMedia = currentSelectedVariant.media[mediaIndex];
             const container = document.getElementById('main-product-media-container');
-            
             let mediaHtml = '';
 
             if (selectedMedia.type === 'video') {
                 mediaHtml = `
-                    <video 
-                        controls 
-                        autoplay 
-                        loop
-                        muted
-                        src="${selectedMedia.url}"
-                        class="w-full h-full object-contain rounded-lg shadow-lg bg-gray-900"
-                        alt="${selectedMedia.alt || 'Product video'}"
-                        onerror="this.onerror=null; console.error('Video load error');"
-                    >
-                        Your browser does not support the video tag.
-                    </video>
+                    <div class="relative w-full max-w-md mx-auto bg-gray-50 rounded-2xl shadow-md overflow-hidden">
+                        <div class="relative w-full pb-[125%]">
+                            <video
+                                controls
+                                autoplay
+                                loop
+                                muted
+                                src="${selectedMedia.url}"
+                                class="absolute inset-0 w-full h-full object-contain bg-black"
+                                onerror="this.onerror=null; console.error('Video load error');"
+                            >
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                    </div>
                 `;
-            } else { // type === 'image'
+            } else {
                 mediaHtml = `
-                    <img
-                        src="${selectedMedia.url}"
-                        alt="${selectedMedia.alt ? currentProductName + ' ' + selectedMedia.alt : 'Product image'}"
-                        class="w-full h-full object-contain rounded-lg shadow-lg"
-                        onerror="this.onerror=null; this.src='https://placehold.co/800x600/e0e0e0/333333?text=Details+Image+Missing';"
-                    >
+                    <div class="relative w-full max-w-md mx-auto bg-gray-50 rounded-2xl shadow-md overflow-hidden">
+                        <div class="relative w-full pb-[125%]">
+                            <img
+                                src="${selectedMedia.url}"
+                                alt="${selectedMedia.alt ? currentProductName + ' ' + selectedMedia.alt : 'Product image'}"
+                                class="absolute inset-0 w-full h-full object-contain transition-transform duration-300 ease-out hover:scale-110"
+                                onerror="this.onerror=null; this.src='https://placehold.co/800x600/e0e0e0/333333?text=Details+Image+Missing';"
+                            >
+                        </div>
+                    </div>
                 `;
             }
 
             container.innerHTML = mediaHtml;
 
-            // Update active thumbnail styling based on index
             document.querySelectorAll('.gallery-thumbnail-btn').forEach((btn, index) => {
                 if (index === mediaIndex) {
                     btn.classList.add('active-gallery');
@@ -573,41 +553,26 @@
             });
         }
 
-
-        /**
-         * Switches the main product view, gallery, and updates state when a color variant is selected.
-         */
         window.selectVariant = function(variantId) {
             const selectedVariant = currentProductVariants.find(v => v.id === variantId);
             if (!selectedVariant) return;
             
-            currentSelectedVariant = selectedVariant; // Set global state
+            currentSelectedVariant = selectedVariant;
             
-            // 1. Update the active color thumbnail styling
             document.querySelectorAll('.variant-thumbnail').forEach(el => {
                 el.classList.remove('active');
             });
-            document.getElementById(`variant-btn-${variantId}`).classList.add('active');
+            const activeBtn = document.getElementById(`variant-btn-${variantId}`);
+            if (activeBtn) activeBtn.classList.add('active');
 
-            // 2. Update the color name display
             document.getElementById('selected-color-name').textContent = selectedVariant.color;
-
-            // 3. Update the price display
             document.getElementById('product-price').textContent = selectedVariant.price;
-
-            // 4. Update the Order Link
             updateOrderLink(currentProductName, selectedVariant.color);
             
-            // 5. RENDER the small image gallery for the new variant
             renderVariantGallery(selectedVariant.media, selectedVariant.color);
-
-            // 6. Select the first item (index 0) in the new media set to update the main view
             selectGalleryMedia(0);
         }
 
-        /**
-         * Switches the view to show a single product's details.
-         */
         window.showProductDetails = function(productId) {
             const product = getProductById(productId);
 
@@ -619,27 +584,20 @@
 
             currentProductName = product.name;
 
-            // Check if the product has variants
             const isVariantProduct = product.variants && product.variants.length > 0;
-            
-            // Set initial variant state
             const initialVariant = isVariantProduct ? product.variants[0] : null;
             currentProductVariants = product.variants || [];
             currentSelectedVariant = initialVariant;
 
-
-            // Determine initial values for rendering
             const initialColorName = isVariantProduct ? initialVariant.color : 'N/A';
             const initialPrice = isVariantProduct ? initialVariant.price : product.price;
             
-            // Brand Information (NEW)
-            const brandInfo = product.brand ? `<p class="text-sm font-medium text-gray-500 mb-2">Brand: <span class="text-indigo-600">${product.brand}</span></p>` : '';
+            const brandInfo = product.brand
+                ? `<p class="text-sm font-medium text-gray-500 mb-2">Brand: <span class="text-indigo-600">${product.brand}</span></p>`
+                : '';
 
-
-            // Generate color variant thumbnail HTML if variants exist
             const variantThumbnailHtml = isVariantProduct ? product.variants.map((variant, index) => {
                 const initialActiveClasses = index === 0 ? 'active' : '';
-                // Use the first image of the variant for the color selector thumbnail
                 const firstImage = variant.media.find(m => m.type === 'image') || variant.media[0];
                 const thumbnailUrl = firstImage ? firstImage.url : 'https://placehold.co/100x100/e0e0e0/333333?text=N/A';
                 
@@ -647,53 +605,51 @@
                     <button
                         id="variant-btn-${variant.id}"
                         onclick="selectVariant('${variant.id}')"
-                        class="variant-thumbnail w-16 h-16 rounded-lg border-2 border-transparent overflow-hidden ${initialActiveClasses} hover:ring-2 hover:ring-indigo-300 transition duration-150 transform hover:scale-105"
+                        class="variant-thumbnail w-16 h-16 rounded-lg border-2 border-transparent overflow-hidden ${initialActiveClasses} hover:ring-2 hover:ring-indigo-300 transition duration-150 transform hover:scale-105 bg-gray-50"
                         aria-label="Select ${variant.color} variant"
                         title="${variant.color}"
                     >
                         <img
                             src="${thumbnailUrl}"
                             alt="${variant.color} thumbnail"
-                            class="w-full h-full object-cover"
+                            class="w-full h-full object-contain"
                             onerror="this.onerror=null; this.src='https://placehold.co/100x100/e0e0e0/333333?text=N/A';"
                         />
                     </button>
                 `;
             }).join('') : '';
 
-            // Construct the color variant selector block
             const variantSelector = isVariantProduct ? `
                 <div class="mb-6">
-                    <h4 class="text-lg font-semibold text-gray-800 mb-2">Color: <span id="selected-color-name" class="font-normal text-indigo-600">${initialColorName}</span></h4>
-                    <div class="flex space-x-3">
+                    <h4 class="text-lg font-semibold text-gray-800 mb-2">
+                        Color: <span id="selected-color-name" class="font-normal text-indigo-600">${initialColorName}</span>
+                    </h4>
+                    <div class="flex flex-wrap gap-3">
                         ${variantThumbnailHtml}
                     </div>
                 </div>
             ` : '';
 
-            // 1. Build the HTML for the detail view
             const detailHtml = `
                 <div class="md:flex md:space-x-10">
                     
-                    <!-- Image Column (Gallery + Main Image) -->
+                    <!-- Image Column -->
                     <div class="md:w-1/2 mb-6 md:mb-0 flex">
-                        <!-- Image Gallery Thumbnails -->
                         ${isVariantProduct ? `<div id="image-gallery-thumbnails" class="flex flex-col space-y-3 mr-4"></div>` : ''}
 
-                        <!-- Main Image / Video will be rendered here -->
-                        <div id="main-product-media-container" class="w-full h-auto max-h-[500px] object-contain rounded-lg shadow-lg flex-grow">
-                            <!-- Content injected by selectGalleryMedia(0) -->
+                        <!-- Main media container (JS injects image/video with hover zoom) -->
+                        <div id="main-product-media-container" class="w-full flex-1">
                         </div>
                     </div>
 
                     <!-- Details Column -->
                     <div class="md:w-1/2">
-                        <h2 class="text-4xl font-bold text-gray-900 mb-4">${product.name}</h2>
-                        ${brandInfo} <!-- Brand Info Added Here -->
-                        ${variantSelector} <!-- Color variant selector added here -->
+                        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">${product.name}</h2>
+                        ${brandInfo}
+                        ${variantSelector}
                         <p id="product-price" class="text-3xl font-extrabold text-indigo-700 mb-6">${initialPrice}</p>
                         
-                        <!-- ORDERING BUTTON - MANDATORY ACTION -->
+                        <!-- ORDER BUTTON -->
                         <div class="mt-8 pt-4 border-t border-gray-200">
                             <h3 class="text-xl font-bold text-gray-900 mb-4">Tertarik?</h3>
                             <p class="text-gray-600 mb-4">Hubungi nomor WA di bawah ini.</p>
@@ -707,34 +663,36 @@
                 </div>
             `;
 
-            // 2. Inject and switch the view
             productDetailsContainer.innerHTML = detailHtml;
             catalogGridView.classList.add('hidden-view');
             detailsView.classList.remove('hidden-view');
-            document.getElementById('filter-bar').classList.add('hidden-view'); // Hide filter bar
+            document.getElementById('filter-bar').classList.add('hidden-view');
             window.location.hash = productId;
             window.scrollTo({ top: 0, behavior: 'smooth' });
 
-            // 3. Set the initial order link
             updateOrderLink(product.name, initialColorName);
 
-            // 4. Render the gallery and select the first item
             if (isVariantProduct) {
                 renderVariantGallery(initialVariant.media, initialVariant.color);
                 selectGalleryMedia(0);
             } else {
-                // For non-variant products, manually inject the image
                 const container = document.getElementById('main-product-media-container');
-                container.innerHTML = `<img src="${product.imageUrl}" alt="${product.name}" class="w-full h-full object-contain rounded-lg shadow-lg">`;
+                container.innerHTML = `
+                    <div class="relative w-full max-w-md mx-auto bg-gray-50 rounded-2xl shadow-md overflow-hidden">
+                        <div class="relative w-full pb-[125%]">
+                            <img
+                                src="${product.imageUrl}"
+                                alt="${product.name}"
+                                class="absolute inset-0 w-full h-full object-contain transition-transform duration-300 ease-out hover:scale-110"
+                            >
+                        </div>
+                    </div>
+                `;
             }
         }
 
-
-        /**
-         * Creates an HTML element for a single product card.
-         */
+        // Coach-style card thumbnails in catalog
         function createProductCard(product) {
-            // Determine the image for the main catalog card. Uses the first image of the first variant if available.
             let cardImageUrl = product.imageUrl;
             let cardPrice = product.price;
 
@@ -743,33 +701,36 @@
                 if (firstMedia && firstMedia.type === 'image') {
                     cardImageUrl = firstMedia.url;
                 } else if (firstMedia && firstMedia.type === 'video') {
-                    // Use a video placeholder for the card if only video is available
-                    cardImageUrl = 'https://placehold.co/600x400/4f46e5/ffffff?text=Video+Available'; 
+                    cardImageUrl = 'https://placehold.co/600x400/4f46e5/ffffff?text=Video+Available';
                 }
                 cardPrice = product.variants[0].price;
             }
             
-            // Extract brand name for display
             const brandName = product.brand || 'Misc.';
 
-            // Note the use of onclick="showProductDetails('${product.id}')"
             return `
-                <div class="bg-white rounded-xl shadow-lg hover:shadow-2xl transition duration-300 transform hover:-translate-y-1">
-                    <div class="w-full h-56 bg-white flex items-center justify-center">
-    			<img
-				src="${cardImageUrl}"
-				alt="Image of ${product.name}"
-				class="max-h-full max-w-full object-contain"
-				onerror="this.onerror=null; this.src='https://placehold.co/600x400/e0e0e0/333333?text=Image+Not+Found';"
-    			>
-		    </div>
-                    <div class="p-6">
-                        <p class="text-sm font-medium text-indigo-500 mb-1">${brandName}</p>
-                        <h2 class="text-2xl font-semibold text-gray-900 mb-2">${product.name}</h2>
-                        <p class="text-indigo-600 text-xl font-bold mb-4">${cardPrice}</p>
+                <div class="bg-white rounded-2xl shadow-sm hover:shadow-md transition duration-300 transform hover:-translate-y-1 group">
+                    <!-- Square image area, Coach/Apple style -->
+                    <div class="relative w-full pb-[100%] bg-gray-50 rounded-t-2xl overflow-hidden">
+                        <img
+                            src="${cardImageUrl}"
+                            alt="Image of ${product.name}"
+                            class="absolute inset-0 w-full h-full object-contain p-4 transition-transform duration-300 ease-out group-hover:scale-105"
+                            onerror="this.onerror=null; this.src='https://placehold.co/600x600/e0e0e0/333333?text=Image+Not+Found';"
+                        >
                     </div>
-                    <div class="p-6 pt-0">
-                        <button onclick="showProductDetails('${product.id}')" class="w-full py-3 bg-indigo-500 text-white font-medium rounded-lg hover:bg-indigo-600 transition duration-150 shadow-md">
+
+                    <!-- Text -->
+                    <div class="p-4">
+                        <p class="text-xs font-semibold tracking-wide text-gray-500 uppercase mb-1">${brandName}</p>
+                        <h2 class="text-sm font-medium text-gray-900 mb-1 line-clamp-2">${product.name}</h2>
+                        <p class="text-indigo-600 text-base font-semibold mt-2">${cardPrice}</p>
+                    </div>
+
+                    <!-- Button -->
+                    <div class="px-4 pb-4">
+                        <button onclick="showProductDetails('${product.id}')"
+                            class="w-full py-2.5 bg-indigo-500 text-white text-sm font-medium rounded-lg hover:bg-indigo-600 transition duration-150 shadow-sm">
                             View Details
                         </button>
                     </div>
@@ -777,50 +738,31 @@
             `;
         }
         
-        /**
-         * Filters the products displayed in the catalog grid based on the selected brand.
-         * @param {string} brandName - The brand to filter by, or 'all'.
-         */
         window.filterProducts = function(brandName) {
             activeFilter = brandName;
             
             const filteredProducts = products.filter(product => {
-                if (brandName === 'all') {
-                    return true;
-                }
-                // Case-insensitive comparison
+                if (brandName === 'all') return true;
                 return product.brand && product.brand.toLowerCase() === brandName.toLowerCase();
             });
             
-            // Re-render the catalog with the filtered list
             renderCatalog(filteredProducts);
         }
 
-        /**
-         * Renders product cards to the catalog grid based on the provided list.
-         * @param {Array} productList - The list of products to display (defaults to the global list).
-         */
         function renderCatalog(productList = products) {
             if (!catalogGrid) return;
             const catalogHtml = productList.map(createProductCard).join('');
             catalogGrid.innerHTML = catalogHtml;
         }
 
-        /**
-         * Populates the brand filter dropdown with unique brands from the product list.
-         */
         function populateBrandFilter() {
             const brands = new Set();
             products.forEach(p => {
-                if (p.brand) {
-                    brands.add(p.brand);
-                }
+                if (p.brand) brands.add(p.brand);
             });
 
-            // Clear existing options (except 'All Brands')
             brandFilterSelect.innerHTML = '<option value="all">All Brands</option>';
             
-            // Add unique brands as options
             Array.from(brands).sort().forEach(brand => {
                 const option = document.createElement('option');
                 option.value = brand;
@@ -829,9 +771,6 @@
             });
         }
 
-        /**
-         * Checks the URL hash on load to see if a specific product should be displayed immediately.
-         */
         function checkInitialHash() {
             const productId = window.location.hash.substring(1);
             if (productId) {
@@ -841,15 +780,12 @@
             }
         }
 
-        // Initialize the catalog display and check the hash on page load
         document.addEventListener('DOMContentLoaded', () => {
             populateBrandFilter();
-            // Initial render uses the full list
-            renderCatalog(); 
+            renderCatalog();
             checkInitialHash();
         });
 
-        // Listen for hash changes (e.g., browser back button)
         window.addEventListener('hashchange', () => {
             checkInitialHash();
         });
