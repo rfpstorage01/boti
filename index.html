@@ -14,54 +14,90 @@
     <script src="https://cdn.tailwindcss.com"></script>
 
     <style>
+        :root {
+            --gold: #B4975A;
+            --leather: #3D2F24;
+            --cream: #F6F2EB;
+            --card: #FAFAF8;
+            --border: #D8D5CF;
+            --muted: #8B7C68;
+        }
+
         body {
             font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-            background-color: #f4f2ef; /* soft neutral like Coach */
+            background-color: var(--cream);
         }
         .hidden-view {
             display: none;
         }
         .variant-thumbnail.active {
-            border: 2px solid #111827; /* near-black, subtle luxury */
+            border: 2px solid var(--gold);
         }
         .gallery-thumbnail-btn.active-gallery {
-            border: 2px solid #111827;
+            border: 2px solid var(--gold);
             opacity: 1;
-            box-shadow: 0 0 0 1px rgba(17, 24, 39, 0.05);
+            box-shadow: 0 0 0 1px rgba(180, 151, 90, 0.08);
+        }
+        /* Floating back button (top-left, Coach mobile style) */
+        #floating-back-btn {
+            position: fixed;
+            top: 88px;
+            left: 16px;
+            z-index: 50;
+        }
+        @media (min-width: 768px) {
+            #floating-back-btn {
+                top: 96px;
+                left: 40px;
+            }
         }
     </style>
 </head>
-<body class="min-h-screen antialiased text-gray-900">
+<body class="min-h-screen antialiased text-[15px] text-[color:var(--leather)]">
 
-    <!-- Luxury Header (H2 style) -->
-    <header class="bg-white border-b border-gray-200">
+    <!-- Luxury Header -->
+    <header class="bg-white/80 backdrop-blur border-b border-[color:var(--border)]">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col gap-1">
             <div class="flex items-baseline justify-between">
-                <h1 class="text-3xl sm:text-4xl font-semibold tracking-[0.35em] uppercase text-gray-900"
+                <h1 class="text-3xl sm:text-4xl font-semibold tracking-[0.35em] uppercase text-[color:var(--leather)]"
                     style="font-family: 'Playfair Display', serif;">
                     BOSTON&nbsp;JASTIP
                 </h1>
             </div>
-            <p class="text-sm text-gray-500">
+            <p class="text-sm text-[color:var(--muted)]">
                 Curated picks from the US, brought to Indonesia with care.
             </p>
         </div>
     </header>
 
+    <!-- Floating Back to Catalog button -->
+    <button
+        id="floating-back-btn"
+        onclick="showCatalogGrid()"
+        class="hidden-view inline-flex items-center justify-center w-10 h-10 rounded-full bg-white border border-[color:var(--gold)] shadow-md hover:shadow-lg hover:bg-[color:var(--card)] transition duration-200"
+        aria-label="Back to catalog"
+    >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[color:var(--leather)]" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd"
+                  d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                  clip-rule="evenodd" />
+        </svg>
+    </button>
+
     <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10">
 
         <!-- Filter Bar -->
-        <section class="mb-6 sm:mb-8">
+        <section id="filter-section" class="mb-6 sm:mb-8">
             <div id="filter-bar"
-                 class="bg-white border border-gray-200 rounded-2xl px-4 sm:px-6 py-3 sm:py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 shadow-sm">
-                <div class="text-xs font-medium tracking-wide text-gray-500 uppercase">
+                 class="bg-[color:var(--card)] border border-[color:var(--border)] rounded-2xl px-4 sm:px-6 py-3 sm:py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 shadow-sm">
+                <div class="text-xs font-medium tracking-[0.18em] text-[color:var(--muted)] uppercase">
                     Filter
-                    <span class="mx-1 text-gray-400">•</span>
-                    <span class="text-gray-700">Brand</span>
+                    <span class="mx-1 text-[color:var(--border)]">•</span>
+                    <span class="text-[color:var(--leather)]">Brand</span>
                 </div>
                 <div>
                     <select id="brand-filter" onchange="filterProducts(this.value)"
-                            class="w-full sm:w-56 text-sm border border-gray-300 rounded-full px-3 py-2 bg-white focus:outline-none focus:ring-1 focus:ring-gray-900 focus:border-gray-900 transition">
+                            class="w-full sm:w-56 text-sm border border-[color:var(--border)] rounded-full px-3 py-2 bg-white focus:outline-none focus:ring-1 focus:ring-[color:var(--gold)] focus:border-[color:var(--gold)] transition">
                         <option value="all">All Brands</option>
                     </select>
                 </div>
@@ -77,19 +113,13 @@
 
         <!-- Product Details View -->
         <section id="details-view" class="hidden-view mt-4 sm:mt-6">
-            <!-- Back Button -->
-            <button onclick="showCatalogGrid()"
-                    class="inline-flex items-center text-xs font-medium tracking-wide uppercase text-gray-600 hover:text-gray-900 mb-4 sm:mb-6">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd"
-                          d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                          clip-rule="evenodd"/>
-                </svg>
-                Back to catalog
-            </button>
+            <!-- Breadcrumb -->
+            <nav id="breadcrumb" class="hidden-view mb-3 sm:mb-4">
+                <!-- JS injects breadcrumb here -->
+            </nav>
 
             <div id="product-details-container"
-                 class="bg-white border border-gray-200 rounded-3xl px-4 sm:px-6 lg:px-10 py-6 sm:py-8 lg:py-10 shadow-sm">
+                 class="bg-white border border-[color:var(--border)] rounded-3xl px-4 sm:px-6 lg:px-10 py-6 sm:py-8 lg:py-10 shadow-sm">
                 <!-- Injected by JS -->
             </div>
         </section>
@@ -97,7 +127,7 @@
     </main>
 
     <script>
-        /* --------- PRODUCT DATA (unchanged logic, cleaned formatting) --------- */
+        /* --------- PRODUCT DATA --------- */
         const products = [
             {
                 id: "medium_corner_zip_wallet",
@@ -455,6 +485,10 @@
         const catalogGrid = document.getElementById('catalog-grid');
         const productDetailsContainer = document.getElementById('product-details-container');
         const brandFilterSelect = document.getElementById('brand-filter');
+        const filterSection = document.getElementById('filter-section');
+        const filterBar = document.getElementById('filter-bar');
+        const floatingBackBtn = document.getElementById('floating-back-btn');
+        const breadcrumbNav = document.getElementById('breadcrumb');
 
         let currentProductVariants = [];
         let currentProductName = '';
@@ -468,13 +502,17 @@
         function showCatalogGrid() {
             catalogGridView.classList.remove('hidden-view');
             detailsView.classList.add('hidden-view');
-            document.getElementById('filter-bar').classList.remove('hidden-view');
+            filterSection.classList.remove('hidden-view');
+            filterBar.classList.remove('hidden-view');
+            floatingBackBtn.classList.add('hidden-view');
+            breadcrumbNav.classList.add('hidden-view');
             window.location.hash = '';
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function updateOrderLink(name, color) {
             const orderLink = document.getElementById('order-link');
+            if (!orderLink) return;
             const whatsappNumber = '16179355621';
             const selectedItemName = color !== 'N/A' ? `${name} (${color})` : name;
             const whatsappMessage = `Halo, saya tertarik untuk Jastip produk ${selectedItemName}.`;
@@ -489,7 +527,7 @@
             const galleryHtml = media.map((item, index) => {
                 const activeClass = index === 0 ? 'active-gallery' : '';
                 const thumbnailSrc = item.type === 'video'
-                    ? 'https://placehold.co/100x100/111827/ffffff?text=VIDEO'
+                    ? 'https://placehold.co/100x100/3D2F24/ffffff?text=VIDEO'
                     : item.url;
 
                 const videoOverlay = item.type === 'video' ? `
@@ -505,8 +543,8 @@
                 return `
                     <button
                         onclick="selectGalleryMedia(${index})"
-                        class="gallery-thumbnail-btn w-16 h-16 rounded-xl border border-gray-200 overflow-hidden ${activeClass}
-                               hover:border-gray-900 transition duration-150 transform hover:-translate-y-0.5 bg-white relative"
+                        class="gallery-thumbnail-btn w-16 h-16 rounded-xl border border-[color:var(--border)] overflow-hidden ${activeClass}
+                               hover:border-[color:var(--gold)] transition duration-150 transform hover:-translate-y-0.5 bg-white relative"
                         aria-label="View ${colorName} - ${item.alt}"
                         title="View ${colorName} - ${item.alt}"
                     >
@@ -533,7 +571,7 @@
 
             if (selectedMedia.type === 'video') {
                 mediaHtml = `
-                    <div class="relative w-full max-w-md mx-auto bg-white rounded-3xl border border-gray-200 overflow-hidden">
+                    <div class="relative w-full max-w-md mx-auto bg-white rounded-3xl border border-[color:var(--border)] overflow-hidden">
                         <div class="relative w-full pb-[110%] bg-black">
                             <video
                                 controls autoplay loop muted
@@ -548,8 +586,8 @@
                 `;
             } else {
                 mediaHtml = `
-                    <div class="relative w-full max-w-md mx-auto bg-white rounded-3xl border border-gray-200 overflow-hidden">
-                        <div class="relative w-full pb-[110%] bg-[#f4f2ef]">
+                    <div class="relative w-full max-w-md mx-auto bg-white rounded-3xl border border-[color:var(--border)] overflow-hidden">
+                        <div class="relative w-full pb-[110%] bg-[color:var(--cream)]">
                             <img
                                 src="${selectedMedia.url}"
                                 alt="${selectedMedia.alt ? currentProductName + ' ' + selectedMedia.alt : 'Product image'}"
@@ -580,12 +618,21 @@
             const activeBtn = document.getElementById(`variant-btn-${variantId}`);
             if (activeBtn) activeBtn.classList.add('active');
 
-            document.getElementById('selected-color-name').textContent = selectedVariant.color;
-            document.getElementById('product-price').textContent = selectedVariant.price;
+            const colorNameEl = document.getElementById('selected-color-name');
+            if (colorNameEl) colorNameEl.textContent = selectedVariant.color;
+
+            const priceEl = document.getElementById('product-price');
+            if (priceEl) priceEl.textContent = selectedVariant.price;
+
             updateOrderLink(currentProductName, selectedVariant.color);
 
             renderVariantGallery(selectedVariant.media, selectedVariant.color);
             selectGalleryMedia(0);
+        }
+
+        window.goHome = function() {
+            // Reload whole page (top of catalog)
+            window.location.href = window.location.origin + window.location.pathname;
         }
 
         window.showProductDetails = function(productId) {
@@ -606,8 +653,28 @@
             const initialPrice = isVariantProduct ? initialVariant.price : product.price;
 
             const brandInfo = product.brand
-                ? `<p class="text-xs tracking-[0.2em] text-gray-500 uppercase mb-3">${product.brand}</p>`
+                ? `<p class="text-xs tracking-[0.18em] text-[color:var(--muted)] uppercase mb-3">${product.brand}</p>`
                 : '';
+
+            // Breadcrumb: Home / Brand / Product Name
+            const brandLabel = product.brand || 'All';
+            breadcrumbNav.innerHTML = `
+                <ol class="flex flex-wrap items-center gap-1 text-[11px] text-[color:var(--muted)]">
+                    <li>
+                        <button onclick="goHome()" class="hover:text-[color:var(--gold)]">
+                            Home
+                        </button>
+                        <span class="mx-1 text-[color:var(--border)]">/</span>
+                    </li>
+                    <li>
+                        <span>${brandLabel}</span>
+                        <span class="mx-1 text-[color:var(--border)]">/</span>
+                    </li>
+                    <li class="text-[color:var(--leather)] line-clamp-1">
+                        ${product.name}
+                    </li>
+                </ol>
+            `;
 
             const variantThumbnailHtml = isVariantProduct
                 ? product.variants.map((variant, index) => {
@@ -619,8 +686,8 @@
                         <button
                             id="variant-btn-${variant.id}"
                             onclick="selectVariant('${variant.id}')"
-                            class="variant-thumbnail w-16 h-16 rounded-xl border border-gray-200 overflow-hidden ${activeClass}
-                                   hover:border-gray-900 transition duration-150 bg-white"
+                            class="variant-thumbnail w-16 h-16 rounded-xl border border-[color:var(--border)] overflow-hidden ${activeClass}
+                                   hover:border-[color:var(--gold)] transition duration-150 bg-white"
                             aria-label="Select ${variant.color}"
                             title="${variant.color}"
                         >
@@ -638,9 +705,9 @@
             const variantSelector = isVariantProduct ? `
                 <div class="mb-6">
                     <div class="flex items-baseline justify-between mb-2">
-                        <h4 class="text-sm font-medium text-gray-800">
+                        <h4 class="text-sm font-medium text-[color:var(--leather)]">
                             Color
-                            <span class="ml-2 text-gray-500 font-normal" id="selected-color-name">${initialColorName}</span>
+                            <span class="ml-2 text-[color:var(--muted)] font-normal" id="selected-color-name">${initialColorName}</span>
                         </h4>
                     </div>
                     <div class="flex flex-wrap gap-3">
@@ -662,7 +729,7 @@
                     <!-- Right: Info -->
                     <div class="md:w-1/2">
                         ${brandInfo}
-                        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-semibold text-gray-900 mb-4"
+                        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-semibold text-[color:var(--leather)] mb-4"
                             style="font-family: 'Playfair Display', serif;">
                             ${product.name}
                         </h2>
@@ -670,17 +737,17 @@
                         ${variantSelector}
 
                         <p id="product-price"
-                           class="text-2xl sm:text-3xl font-semibold tracking-wide text-gray-900 mb-6">
+                           class="text-2xl sm:text-3xl font-semibold tracking-wide text-[color:var(--leather)] mb-6">
                             ${initialPrice}
                         </p>
 
-                        <div class="mt-6 pt-6 border-t border-gray-200">
-                            <p class="text-xs tracking-[0.2em] text-gray-500 uppercase mb-3">Order via WhatsApp</p>
-                            <p class="text-sm text-gray-600 mb-4">
+                        <div class="mt-6 pt-6 border-t border-[color:var(--border)]">
+                            <p class="text-xs tracking-[0.18em] text-[color:var(--muted)] uppercase mb-3">Order via WhatsApp</p>
+                            <p class="text-sm text-[color:var(--muted)] mb-4">
                                 Kirim pesan ke kami untuk cek ketersediaan dan estimasi total Jastip.
                             </p>
                             <a href="#" id="order-link" target="_blank"
-                               class="inline-flex items-center justify-center px-6 py-2.5 rounded-full border border-gray-900 text-sm font-medium text-gray-900 hover:bg-gray-900 hover:text-white transition duration-150">
+                               class="inline-flex items-center justify-center px-6 py-2.5 rounded-full border border-[color:var(--leather)] text-sm font-medium text-[color:var(--leather)] hover:bg-[color:var(--leather)] hover:text-[color:var(--card)] transition duration-150">
                                 Hubungi via WhatsApp
                             </a>
                         </div>
@@ -691,7 +758,11 @@
             productDetailsContainer.innerHTML = detailHtml;
             catalogGridView.classList.add('hidden-view');
             detailsView.classList.remove('hidden-view');
-            document.getElementById('filter-bar').classList.add('hidden-view');
+            filterSection.classList.add('hidden-view');
+            filterBar.classList.add('hidden-view');
+            floatingBackBtn.classList.remove('hidden-view');
+            breadcrumbNav.classList.remove('hidden-view');
+
             window.location.hash = productId;
             window.scrollTo({ top: 0, behavior: 'smooth' });
 
@@ -703,8 +774,8 @@
             } else {
                 const container = document.getElementById('main-product-media-container');
                 container.innerHTML = `
-                    <div class="relative w-full max-w-md mx-auto bg-white rounded-3xl border border-gray-200 overflow-hidden">
-                        <div class="relative w-full pb-[110%] bg-[#f4f2ef]">
+                    <div class="relative w-full max-w-md mx-auto bg-white rounded-3xl border border-[color:var(--border)] overflow-hidden">
+                        <div class="relative w-full pb-[110%] bg-[color:var(--cream)]">
                             <img
                                 src="${product.imageUrl}"
                                 alt="${product.name}"
@@ -725,7 +796,7 @@
                 if (firstMedia && firstMedia.type === 'image') {
                     cardImageUrl = firstMedia.url;
                 } else if (firstMedia && firstMedia.type === 'video') {
-                    cardImageUrl = 'https://placehold.co/600x600/111827/ffffff?text=Video';
+                    cardImageUrl = 'https://placehold.co/600x600/3D2F24/ffffff?text=Video';
                 }
                 cardPrice = product.variants[0].price;
             }
@@ -733,9 +804,9 @@
             const brandName = (product.brand || 'Misc.').toUpperCase();
 
             return `
-                <div class="bg-white border border-gray-200 rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition duration-300 group">
+                <div class="bg-white border border-[color:var(--border)] rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition duration-300 group">
                     <!-- Image -->
-                    <div class="relative w-full pb-[100%] bg-[#f8f7f5]">
+                    <div class="relative w-full pb-[100%] bg-[color:var(--card)]">
                         <img
                             src="${cardImageUrl}"
                             alt="Image of ${product.name}"
@@ -746,16 +817,16 @@
 
                     <!-- Content -->
                     <div class="px-4 pt-4 pb-3">
-                        <p class="text-[10px] tracking-[0.25em] text-gray-500 mb-1">${brandName}</p>
-                        <h2 class="text-sm font-medium text-gray-900 mb-1 line-clamp-2">${product.name}</h2>
-                        <p class="text-sm font-semibold text-gray-900 mt-2">${cardPrice}</p>
+                        <p class="text-[10px] tracking-[0.25em] text-[color:var(--muted)] mb-1">${brandName}</p>
+                        <h2 class="text-sm font-medium text-[color:var(--leather)] mb-1 line-clamp-2">${product.name}</h2>
+                        <p class="text-sm font-semibold text-[color:var(--leather)] mt-2">${cardPrice}</p>
                     </div>
 
                     <!-- Button -->
                     <div class="px-4 pb-4">
                         <button
                             onclick="showProductDetails('${product.id}')"
-                            class="w-full py-2.5 text-xs font-medium rounded-full border border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white transition duration-150">
+                            class="w-full py-2.5 text-xs font-medium rounded-full border border-[color:var(--leather)] text-[color:var(--leather)] hover:bg-[color:var(--leather)] hover:text-[color:var(--card)] transition duration-150">
                             View details
                         </button>
                     </div>
