@@ -51,6 +51,35 @@
                 left: 40px;
             }
         }
+        /* Fade-in animation utility */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(-4px);
+            animation: fadeInUp 0.25s ease-out forwards;
+        }
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        /* Breadcrumb hover underline */
+        .breadcrumb-link {
+            position: relative;
+        }
+        .breadcrumb-link::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -2px;
+            width: 0;
+            height: 1px;
+            background-color: var(--gold);
+            transition: width 0.2s ease;
+        }
+        .breadcrumb-link:hover::after {
+            width: 100%;
+        }
     </style>
 </head>
 <body class="min-h-screen antialiased text-[15px] text-[color:var(--leather)]">
@@ -74,14 +103,15 @@
     <button
         id="floating-back-btn"
         onclick="showCatalogGrid()"
-        class="hidden-view inline-flex items-center justify-center w-10 h-10 rounded-full bg-white border border-[color:var(--gold)] shadow-md hover:shadow-lg hover:bg-[color:var(--card)] transition duration-200"
+        class="hidden-view inline-flex items-center justify-center px-4 h-10 rounded-full bg-white border border-[color:var(--gold)] text-[color:var(--leather)] shadow-md hover:shadow-lg hover:bg-[color:var(--card)] transition duration-200 text-xs sm:text-sm font-medium"
         aria-label="Back to catalog"
     >
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[color:var(--leather)]" viewBox="0 0 20 20" fill="currentColor">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
             <path fill-rule="evenodd"
                   d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
                   clip-rule="evenodd" />
         </svg>
+        <span>Back to Catalog</span>
     </button>
 
     <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10">
@@ -115,7 +145,7 @@
         <section id="details-view" class="hidden-view mt-4 sm:mt-6">
             <!-- Breadcrumb -->
             <nav id="breadcrumb" class="hidden-view mb-3 sm:mb-4">
-                <!-- JS injects breadcrumb here -->
+                <!-- JS injects breadcrumb -->
             </nav>
 
             <div id="product-details-container"
@@ -504,8 +534,13 @@
             detailsView.classList.add('hidden-view');
             filterSection.classList.remove('hidden-view');
             filterBar.classList.remove('hidden-view');
+
             floatingBackBtn.classList.add('hidden-view');
+            floatingBackBtn.classList.remove('fade-in-up');
             breadcrumbNav.classList.add('hidden-view');
+            breadcrumbNav.classList.remove('fade-in-up');
+            floatingBackBtn.style.display = "none";
+
             window.location.hash = '';
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
@@ -630,10 +665,18 @@
             selectGalleryMedia(0);
         }
 
+        // Reload full page when "Home" in breadcrumb is clicked
         window.goHome = function() {
-            // Reload whole page (top of catalog)
             window.location.href = window.location.origin + window.location.pathname;
-        }
+        };
+
+        // When user clicks brand in breadcrumb -> go back to catalog filtered by that brand
+        window.filterByBrandFromBreadcrumb = function(brand) {
+            if (!brandFilterSelect) return;
+            brandFilterSelect.value = brand;
+            filterProducts(brand);
+            showCatalogGrid();
+        };
 
         window.showProductDetails = function(productId) {
             const product = getProductById(productId);
@@ -661,13 +704,18 @@
             breadcrumbNav.innerHTML = `
                 <ol class="flex flex-wrap items-center gap-1 text-[11px] text-[color:var(--muted)]">
                     <li>
-                        <button onclick="goHome()" class="hover:text-[color:var(--gold)]">
+                        <button onclick="goHome()" class="breadcrumb-link hover:text-[color:var(--gold)]">
                             Home
                         </button>
                         <span class="mx-1 text-[color:var(--border)]">/</span>
                     </li>
                     <li>
-                        <span>${brandLabel}</span>
+                        <button
+                            onclick="filterByBrandFromBreadcrumb('${brandLabel}')"
+                            class="breadcrumb-link hover:text-[color:var(--gold)]"
+                        >
+                            ${brandLabel}
+                        </button>
                         <span class="mx-1 text-[color:var(--border)]">/</span>
                     </li>
                     <li class="text-[color:var(--leather)] line-clamp-1">
@@ -760,8 +808,12 @@
             detailsView.classList.remove('hidden-view');
             filterSection.classList.add('hidden-view');
             filterBar.classList.add('hidden-view');
+
+            floatingBackBtn.style.display = "inline-flex";
             floatingBackBtn.classList.remove('hidden-view');
             breadcrumbNav.classList.remove('hidden-view');
+            floatingBackBtn.classList.add('fade-in-up');
+            breadcrumbNav.classList.add('fade-in-up');
 
             window.location.hash = productId;
             window.scrollTo({ top: 0, behavior: 'smooth' });
